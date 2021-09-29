@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load jsonify %}
+
+{% block main %}
+<div class="row">
+<aside class="col-3">
+	<strong>LatLon Values: </strong>
+		<small id="mouse-position"></small>
+	<form class="form-inline">
+		{% csrf_token %}
+      <label for="type">Geometry type: &nbsp;</label>
+      <select class="form-control mr-2 mb-2 mt-2" id="type">
+        <option value="Point">Point</option>
+        <option value="LineString">LineString</option>
+        <option value="Polygon">Polygon</option>
+        <option value="Circle">Circle</option>
+        <option value="None">None</option>
+      </select>
+      <input class="form-control mr-2 mb-2 mt-2" type="button" value="Undo" id="undo">
+    </form>
+	<h3>App Navigation</h5>
+		<form method="POST">
+			{% csrf_token %}
+			<div id="navpanel" data-datasets="{{ datasets }}">
+				<select id="option1">
+					<option value="...">Select Map Type</option>
+				</select>
+				<select id="option2">
+					<option value="...">Select a Dataset</option>
+				</select>
+				<select id="option3">
+					<option value="...">Select a Sensor</option>
+				</select>
+				<select id="option4">
+					<option value="...">Select a Product</option>
+				</select>
+				<label for="start_date" class="date">Start Date:</label>
+				<input id="start_date" type="date" class="form-control buttontheme" >
+				<label for="end_date" class="date">End Date:</label>
+				<input id="end_date" type="date" class="form-control buttontheme" >
+				<button id="loadmap" type="submit" class="btn btn-success">Load Map</button>
+			</div>
+	</form>
+	
+</aside>
+
+<section class="col-9">
+	<div id="map" class="map"></div>
+</section>
+</div>
+
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.8.1/css/ol.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="{% static 'maps/css/maps.css'%}">
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.7.0/build/ol.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="{% static 'maps/js/ajax.js' %}"></script>
+  <script type="text/javascript" src="{% static 'maps/js/maps.js' %}"></script>
+{% endblock %}

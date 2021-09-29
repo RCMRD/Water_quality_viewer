@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="keywords" content="Water Quality, Chlorophyll, SST, Secchi Depth">
+	<!-- <base href="https://apps.rcmrd.org/waterquality" target="_blank"> -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/css/main.css' %}">
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+	<script type="text/javascript" href="{% static 'main/js/main.js' %}" ></script>
+
+
+	{% block title %}
+	<title>Viewer</title>
+	{% endblock %}
+	{% block styles %}
+	{% endblock %}
+	{% block scripts %}
+	{% endblock %}
+</head>
+<main>
+	<header>
+		<picture id="logo">
+			<img src="{% static 'main/images/water-logo.jpg' %}">
+		</picture>
+		<h1>In-land Water Resource Monitoring and Information Application</h1>
+		<nav class="nav nav-tabs justify-content-end">
+			<li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+			<li class="nav-item"><a class="nav-link" href="">About</a></li>
+			<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" href="">Applications</a>
+				<ul class="dropdown-menu">
+					<li class="nav-item"><a class="dropdown-item" href="{% url 'maps' %}">Map Viewer</a></li>
+					<li class="nav-item"><a class="dropdown-item" href="{% url 'charts' %}">Charts</a></li>
+					<li class="nav-item"><a class="dropdown-item" href="">Query</a></li>
+				</ul>
+			</li>
+			<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" href="">Authenticate</a>
+				<ul class="dropdown-menu">
+					<li class="nav-item"><a class="dropdown-item" href="">Register</a></li>
+					<li class="nav-item"><a class="dropdown-item" href="">Login</a></li>
+				</ul>
+			</li>
+		</nav>
+	</header>
+	{% block main %}
+	{% endblock %}
+	<footer>
+		<h4>Will Add the following links</h4>
+		<li><a href="">Contact</a></li>
+		<li><a href="">Log In</a></li>
+		<li><a href="">Register</a></li>
+		<li><a href="">E-learning Platform</a></li>
+	</footer>
+</main>
+</html>

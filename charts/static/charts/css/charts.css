@@ -1,0 +1,9 @@
+#map {
+	height: 200px;
+}
+select, input {
+	width: 100%;
+}
+#charts {
+	height: 500px;
+}

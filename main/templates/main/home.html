@@ -1,0 +1,67 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block main %}
+<section id="slider" class="carousel slide" data-ride="carousel">
+	<ol class="carousel-indicators">
+		{% for slider in sliders %}
+		<li data-target="#slider" data-slide-to="{{ slider.title }}"></li>
+		{% endfor %}
+	</ol>
+	<div class="carousel-inner">
+		<div class="carousel-item">
+			{% for slider in sliders %}
+			<img class="d-block" src="{% static '' %}{{ slider.img.url }}" alt="{{ slider.title }}">
+			{% endfor %}
+		</div>
+	</div>
+	<a class="carousel-control-prev" href="#slider" role="button" data-slide="prev">
+		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		<span class="sr-only">Previous</span>
+	</a>
+	<a class="carousel-control-next" href="#slider" role="button" data-slide="next">
+		<span class="carousel-control-next-icon" aria-hidden="true"></span>
+		<span class="sr-only">Next</span>
+	</a>
+</section>
+
+<div id="posts" class="row">
+<section id="blog_posts" class="col-5">
+	{% for blog in blogs %}
+	<div id="blog_area">
+		<div><h3>{{ blog.title }}</h3></div>
+		<div><small>{{ blog.abstract }}</small></div>
+		<div class="text"><p>{{ blog.text }}</p></div>
+		<small><p>Continue Reading >>>!</p></small>
+	</div>
+	{% endfor %}
+</section>
+
+<section id="image_posts" class="col-7">
+	{% for imagepost in imageposts %}
+	<div id="image_posts">
+		<div><h3>{{ imagepost.title }}</h3></div>
+		<img class="d-block" src="{% static '' %}{{ imagepost.img.url }}" alt="{{ imagepost.title }}">
+		<div><small> {{ imagepost.abstract }}</small></div>
+		<div class="text"><p>{{ imagepost.text }}</p></div>
+		<small><p>Continue Reading >>>!</p></small>
+	</div>
+	{% endfor %}
+</section>
+</div>
+
+<div id="articles" class="container">
+<section>
+	{% for article in articles %}
+	<h3>{{ article.title }}</h3>
+	<h5>{{ article.author }}</h5>
+	<small>{{ article.abstract }}</small>
+	<small><p>Continue Reading >>>!</p></small>
+	{% endfor %}
+</section>
+</div>
+
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/home.css' %}">
+{% endblock %}

@@ -1,0 +1,34 @@
+#slider {
+	height: 400px;
+	background-color: grey;
+	margin-top: 20px;
+}
+.carousel-inner {
+	width: 60%;
+	height: 100%;
+	margin-left: 20%;
+	margin-top: 15px;
+}
+.carousel-item > img {
+	width: 100%;
+	height: 100%;
+} 
+#posts, #articles {
+	margin-top: 20px;
+}
+#posts {
+	margin-left: 55px;
+	margin-right: 55px;
+}
+.text {
+	text-align: justify;
+	display: none;
+}
+small {
+	text-align: justify;
+}
+small > p {
+	color:  blue;
+	text-decoration: underline;
+	font-style: italic;
+}

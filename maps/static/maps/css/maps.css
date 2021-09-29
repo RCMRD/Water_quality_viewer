@@ -1,0 +1,16 @@
+#map {
+	height: 500px;
+}
+.map:-webkit-full-screen {
+	height: 100%;
+	margin: 0;
+}
+.map:-ms-fullscreen {
+    height: 100%;
+ }
+.map:fullscreen {
+	height: 100%;
+}
+select, input {
+	width: 100%;
+}

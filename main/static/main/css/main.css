@@ -1,0 +1,17 @@
+#logo > img {
+	width: 100px;
+	height: 100px;
+}
+header > h1 {
+	width: 75%;
+	float: right;
+}
+nav {
+	height: 50px;
+	background-color: #F9F5F5;
+	color:  black;
+	width: 100%;
+}
+footer {
+	margin-bottom: 0;
+}
