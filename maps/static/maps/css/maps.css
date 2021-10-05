@@ -14,3 +14,31 @@
 select, input {
 	width: 100%;
 }
+aside {
+	height: 500px;
+	overflow: auto;
+}
+#maps2, #maps4 {
+	height: 100%;
+	width: 100%;
+	display: none;
+}
+.maps2 {
+	height: 100%;
+	width: 49%;
+	margin: 5pxs;
+}
+.maps4 {
+	height: 48%;
+	width: 49%;
+	margin: 5pxs;
+}
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+#screen2btns, #screen4btns {
+	display: none;
+}

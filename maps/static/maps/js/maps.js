@@ -90,25 +90,25 @@
     }
 
     init_events = function(){
-          load_map = function(data, layer, map) {
-            map.getLayers().forEach(layer => {
+          load_map = function(data, layer, which) {
+            which.getLayers().forEach(layer => {
               if (layer.get('name') != undefined & layer.get('name') === 'workinglayer') {
-                map.removeLayer(layer);
+                which.removeLayer(layer);
               };
             });
             layer.getSource().setUrl(data.url);
-            map.addLayer(layer);
+            which.addLayer(layer);
             return;
           };
 
-          map_request = function(data_dict, layer, map){
+          map_request = function(data_dict, layer, which){
             $.ajax({
                 type: "POST",
                 url: "get_map/",
                 data: data_dict,
                 success: function(response){
                 console.log(response);
-                  load_map(response, layer, map);
+                  load_map(response, layer, which);
                 },
                 error: function(error) {
                   alert('Oops! There was an error of "'+error+'" while processing your request');
@@ -120,26 +120,26 @@
     /*
     Initialize Functions
     */
-    init_map = function(){
+    init_map = function(target){
       let raster = new ol.layer.Tile({
         source: new ol.source.OSM()
       });
       raster.set('name', 'baselayer')
 
       // const attributions = '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>';
-      const mousePositionControl = new ol.control.MousePosition({
-        coordinateFormat: ol.coordinate.createStringXY(4),
-        projection: 'EPSG:4326',
-        className: 'custom-mouse-position',
-        target: document.getElementById('mouse-position'),
-      });
+      // const mousePositionControl = new ol.control.MousePosition({
+      //   coordinateFormat: ol.coordinate.createStringXY(4),
+      //   projection: 'EPSG:4326',
+      //   className: 'custom-mouse-position',
+      //   target: document.getElementById('mouse-position'),
+      // });
       const scaleline = new ol.control.ScaleLine({units: 'us'});
       const fullscreen = new ol.control.FullScreen();
-      let controls = [mousePositionControl, fullscreen, scaleline];
-      map = new ol.Map({
+      let controls = [fullscreen, scaleline];
+      return new ol.Map({
         controls: ol.control.defaults().extend(controls),
         layers: [raster],
-        target: "map",
+        target: target,
         view: new ol.View({
           center: ol.proj.fromLonLat([32.9460, -1.1315]),
           zoom: 8,
@@ -149,7 +149,8 @@
     }
 
     init_all = function(){
-      init_map();
+      map = init_map("map");
+      // init_map("map");
       update_options();
       init_events();
     }
@@ -160,6 +161,7 @@
     public_interace = {};
 
     function getWqImage(which) {
+      console.log(which);
       let workinglayer = new ol.layer.Tile({
         source: new ol.source.XYZ({
           url:'',
@@ -201,6 +203,11 @@
       }
     }
 
+    function syncViews(event, view) {
+      let newValue = event.target.get(event.key);
+      view.set(event.key, newValue);
+    }
+
     /*
     RUN THE FUNCTIONS
     */
@@ -218,6 +225,122 @@
         const typeval = $('#type').val();
         addInteraction(typeval, map);
       };
+
+      $('#splitter').on('click', function(e){
+        let split = $('#splitter').val();
+        if (split == 1) {
+          document.getElementById("map").style.display = "None";
+          document.getElementById("loadmap").style.display ="None"
+          document.getElementById("maps4").style.display = "None";
+          document.getElementById("screen4btns").style.display = "None";
+          $(".ol-viewport").remove();
+          document.getElementById("maps2").style.display = "inline-block";
+          // document.getElementById("map22").style.display = "inline-block";
+          document.getElementById("screen2btns").style.display = "inline-block";
+          let map1 = init_map("map21");
+          let map2 = init_map("map22");
+          let view1 = map1.getView();
+          let view2 = map2.getView();
+
+          view1.on('change:resolution', function(event) {
+            syncViews(event,map2.getView());
+          });
+          view1.on('change:center', function(event) {
+            syncViews(event,map2.getView());
+          });
+
+          view2.on('change:resolution', function(event) {
+            syncViews(event,map1.getView());
+          });
+          view2.on('change:center', function(event) {
+            syncViews(event,map1.getView());
+          });
+          $('#loadmap1').on('click', function(e){
+           e.preventDefault(); 
+           getWqImage(map1);
+          });
+          $('#loadmap2').on('click', function(e){
+           e.preventDefault(); 
+           getWqImage(map2);
+          });
+        } else if (split == 2) {
+          document.getElementById("map").style.display = "None";
+          document.getElementById("loadmap").style.display ="None";
+          document.getElementById("screen2btns").style.display = "None";
+          document.getElementById("maps2").style.display = "None";
+          $(".ol-viewport").remove();
+          document.getElementById("maps4").style.display = "inline-block";
+          document.getElementById("screen4btns").style.display = "inline-block";
+          let map1 = init_map("map41");
+          let map2 = init_map("map42");
+          let map3 = init_map("map43");
+          let map4 = init_map("map44");
+          let view1 = map1.getView();
+          let view2 = map2.getView();
+          let view3 = map3.getView();
+          let view4 = map4.getView();
+          view1.on('change:resolution', function(event) {
+            syncViews(event,map2.getView());
+            syncViews(event,map3.getView());
+            syncViews(event,map4.getView());
+          });
+          view1.on('change:center', function(event) {
+            syncViews(event,map2.getView());
+            syncViews(event,map3.getView());
+            syncViews(event,map4.getView());
+          });
+
+          view2.on('change:resolution', function(event) {
+            syncViews(event,map1.getView());
+            syncViews(event,map3.getView());
+            syncViews(event,map4.getView());
+          });
+          view2.on('change:center', function(event) {
+            syncViews(event,map1.getView());
+            syncViews(event,map3.getView());
+            syncViews(event,map4.getView());
+          });
+
+          view3.on('change:resolution', function(event) {
+            syncViews(event,map1.getView());
+            syncViews(event,map2.getView());
+            syncViews(event,map4.getView());
+          });
+          view3.on('change:center', function(event) {
+            syncViews(event,map1.getView());
+            syncViews(event,map2.getView());
+            syncViews(event,map4.getView());
+          });
+
+          view4.on('change:resolution', function(event) {
+            syncViews(event,map1.getView());
+            syncViews(event,map2.getView());
+            syncViews(event,map3.getView());
+          });
+          view4.on('change:center', function(event) {
+            syncViews(event,map1.getView());
+            syncViews(event,map2.getView());
+            syncViews(event,map3.getView());
+          });
+
+          $('#loadmap41').on('click', function(e){
+           e.preventDefault(); 
+           getWqImage(map1);
+          });
+          $('#loadmap42').on('click', function(e){
+           e.preventDefault(); 
+           getWqImage(map2);
+          });
+          $('#loadmap43').on('click', function(e){
+           e.preventDefault(); 
+           getWqImage(map3);
+          });
+          $('#loadmap44').on('click', function(e){
+           e.preventDefault(); 
+           getWqImage(map4);
+          });
+        }
+      });
 
       init_all();
 

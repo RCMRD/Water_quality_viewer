@@ -5,8 +5,8 @@
 {% block main %}
 <div class="row">
 <aside class="col-3">
-	<strong>LatLon Values: </strong>
-		<small id="mouse-position"></small>
+	<!-- <strong>LatLon Values: </strong>
+		<small id="mouse-position"></small> -->
 	<form class="form-inline">
 		{% csrf_token %}
       <label for="type">Geometry type: &nbsp;</label>
@@ -42,11 +42,35 @@
 				<button id="loadmap" type="submit" class="btn btn-success">Load Map</button>
 			</div>
 	</form>
-	
+	<label for="splitter">Split Canvas</label>
+		<select id="splitter">
+			<option value="1">2 Screens</option>
+			<option value="2">4 Screens</option>
+		</select>
+		<div id="screen2btns">
+		<button id="loadmap1" type="submit" class="btn btn-success">Load to Screen A</button>
+		<button id="loadmap2" type="submit" class="btn btn-success">Load to Screen B</button>
+		</div>
+		<div id="screen4btns">
+		<button id="loadmap41" type="submit" class="btn btn-success">Load to Screen A</button>
+		<button id="loadmap42" type="submit" class="btn btn-success">Load to Screen B</button>
+		<button id="loadmap43" type="submit" class="btn btn-success">Load to Screen C</button>
+		<button id="loadmap44" type="submit" class="btn btn-success">Load to Screen D</button>
+		</div>
 </aside>
 
 <section class="col-9">
 	<div id="map" class="map"></div>
+	<div id="maps2" class="split">
+		<div id="map21" class="maps2 left"></div>
+		<div id="map22" class="maps2 right"></div>
+	</div>
+	<div id="maps4" class="split">
+		<div id="map41" class="maps4 left"></div>
+		<div id="map42" class="maps4 right"></div>
+		<div id="map43" class="maps4 left"></div>
+		<div id="map44" class="maps4 right"></div>
+	</div>
 </section>
 </div>
 
