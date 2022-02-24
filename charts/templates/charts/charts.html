@@ -4,17 +4,56 @@
 {% block main %}
 <div class="row">
 	<aside class="col-3">
-		<h3>App Navigation</h5>
+		<h3>App Navigation</h3>
 			<div id="map">
 			</div>
 			<form method="POST" id="navpanel" data-datasets="{{ datasets }}">
 				{% csrf_token %}
 				{{ form.as_p}}
+				<label for="charttype"><strong>Chart type: &nbsp; </strong></label>
+	      <select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="charttype">
+	      	<option value="...">Select Chart Type</option>
+	        <option value="scatter">Scatter Plot</option>
+	        <option value="line">Line Plot</option>
+	      </select>
+	      <label for="type"><strong>Geometry type: &nbsp;</strong></label>
+		      <select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="type">
+		        <!-- <option value="...">Select Geometry Type</option> -->
+		        <option value="Point">Point</option>
+		        <option value="Polygon">Polygon</option>
+		        <!-- <option value="Circle">Circle</option> -->
+		        <!-- <option value="Square">Square</option> -->
+		        <option value="Box">Box</option>
+		        <!-- <option value="Star">Star</option> -->
+		        <option value="None">None</option>
+		      </select>
+		    <label for="navpanel"><strong>Data Select:</strong></label>
+		    <div id="navpanel" data-datasets="{{ datasets }}">
+						<select id="option1" class="form-select form-select-sm mb-1">
+							<option value="...">Select Map Type</option>
+						</select>
+						<select id="option2" class="form-select form-select-sm mb-1">
+							<option value="...">Select a Dataset</option>
+						</select>
+						<select id="option3" class="form-select form-select-sm mb-1">
+							<option value="...">Select a Sensor</option>
+						</select>
+						<select id="option4" class="form-select form-select-sm mb-1">
+							<option value="...">Select a Product</option>
+						</select>
+						<div class="date mt-2">
+							<label for="start_date" class="date"><strong>Start Date:</strong></label>
+							<input id="start_date" type="date" class="form-control buttontheme" >
+							<label for="end_date" class="date"><strong>End Date:</strong></label>
+							<input id="end_date" type="date" class="form-control buttontheme" >
+					  </div>
+				</div>
+				<button id="loadchart" type="submit" class="btn btn-success mt-2 justify-content-between">Load Chart</button>
 			</form>
 	</aside>
 
 	<section class="col-9">
-		<div id="charts">
+		<div id="container">
 			
 		</div>
 	</section>
@@ -22,6 +61,7 @@
 {% endblock %}
 
 {% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.8.1/css/ol.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="{% static 'charts/css/charts.css'%}">
 {% endblock %}
 
@@ -29,5 +69,7 @@
   <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.7.0/build/ol.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script type="text/javascript" src="{% static 'charts/js/charts.js' %}"></script>
+	<script type="text/javascript" src="{% static 'maps/js/ajax.js' %}"></script>
+	<!-- <script type="module" src="{% static 'charts/js/module/high_chart_modules.js' %}"></script> -->
+  <script type="module" src="{% static 'charts/js/charts.js' %}"></script>
 {% endblock %}

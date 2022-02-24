@@ -1,0 +1,60 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block main %}
+<div class="row">
+<aside class="col-3">
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit">Upload</button>
+	</form>
+	<p class="h3 fw-bolder">Choose Variables to Query</p>
+		<form method="POST">
+			{% csrf_token %}
+			<div id="chckpanel" data-checks="{{ checks }}">
+			</div>
+			<label for="start_date" class="date mt-1 mb-1"><strong>Start Date: </strong></label>
+			<input id="start_date" type="date" class="form-control buttontheme" >
+			<label for="end_date" class="date mb-1 mt-1"><strong>End Date: </strong></label>
+			<input id="end_date" type="date" class="form-control buttontheme" >
+			<button id="qfile" type="submit" class="btn btn-success mt-1">Query Files</button>
+	</form>
+
+	<!-- <div id="map" style="width:80%; height:90%;"></div> -->
+
+	
+</aside>
+<content class="col-9">
+	<table class="table" data-filecontent={{ filecontent }} id="filecontent">
+		<thead>
+			<th>#</th>
+		</thead>
+		<tbody>
+			<tr id="lat">
+				<th>Latitude</th>
+			</tr>
+			<tr id="lon">
+				<th>Longitude</th>
+			</tr>
+		<!-- 
+			{% for line in filecontent %}
+			<tr>
+				{% for i in line %}
+				<td>{{ i }}</td>
+				{% endfor %}
+			</tr>
+			{% endfor %} -->
+		</tbody>
+	</table>
+</content>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="{% static 'query/js/query.js' %}"></script>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'query/css/query.css'%}">
+{% endblock %}

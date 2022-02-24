@@ -18,6 +18,7 @@ from django.urls import path, include
 from main import urls as main_urls
 from maps import urls as maps_urls
 from charts import urls as charts_urls
+from query import urls as query_urls
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,7 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', include(main_urls)),
     path('maps/', include(maps_urls)),
-    path('charts/', include(charts_urls))
+    path('charts/', include(charts_urls)),
+    path('query/', include(query_urls)),
 ] 
 
 # if settings.DEBUG:

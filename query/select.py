@@ -1,0 +1,18 @@
+options = {
+	'chl_modis_aq': {'display' : 'MODIS Aqua Chlorophyll'},
+	'sd_modis_aq': {'display' :'MODIS Aqua Sechi Depth'},
+	'tsi_modis_aq': {'display' :'MODIS Aqua Trophic State Index'},
+	'tsir_modis_aq': {'display' :'MODIS Aqua Trophic State Index Reclassified'},
+	'chl_modis_tr': {'display' : 'MODIS Terra Chlorophyll'},
+	'sd_modis_tr': {'display' :'MODIS Terra Sechi Depth'},
+	'tsi_modis_tr': {'display' :'MODIS Terra Trophic State Index'},
+	'tsir_modis_tr': {'display' :'MODIS Terra Trophic State Index Reclassified'},
+	'chl_sen2': {'display' : 'Sentinel 2 Chlorophyll'},
+	'sd_sen2': {'display' :'Sentinel 2 Sechi Depth'},
+	'tsi_sen2': {'display' :'Sentinel 2 Trophic State Index'},
+	'tsir_sen2': {'display' :'Sentinel 2 Trophic State Index Reclassified'},
+	'chl_ls8': {'display' : 'Landsat 8 Chlorophyll'},
+	'sd_ls8': {'display' :'Landsat 8 Sechi Depth'},
+	'tsi_ls8': {'display' :'Landsat 8 Trophic State Index'},
+	'tsir_ls8': {'display' :'Landsat 8 Trophic State Index Reclassified'},
+}

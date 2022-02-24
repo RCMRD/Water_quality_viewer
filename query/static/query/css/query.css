@@ -1,0 +1,11 @@
+aside {
+	height:  500px;
+}
+
+form > .fw-bolder {
+	height: 30%;
+}
+#chckpanel  {
+	height: 150px;
+	overflow: scroll;
+}
