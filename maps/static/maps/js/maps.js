@@ -5,7 +5,7 @@
     // function variables
     var init_map, init_navs, init_events, init_all, update_options, load_map, map_request;
     // local variables
-    var public_interace, map, update_options, m_option1, m_option2, m_option3,
+    var public_interface, map, update_options, m_option1, m_option2, m_option3,
     options, draw, interaction1;
     /*
 
@@ -31,8 +31,7 @@
         if (m_option1 == 'lulc') {
           $("#option3").hide();
           $("#option4").hide();
-          $("label[class='date']").hide();
-          $("input[type='date'").hide();
+          $(".date").hide();
 
           for (const lulcs in options[m_option1]['options']) {
             if (lulcs != "...") {
@@ -46,8 +45,7 @@
         for (const dataset in options[m_option1]['options']) {
           $("#option3").show();
           $("#option4").show();
-          $("label[class='date']").show();
-          $("input[type='date'").show();
+          $(".date").show();
           if (dataset != "...") {
             $('#option2').append($('<option>', {
               value: dataset,
@@ -150,7 +148,6 @@
 
     init_all = function(){
       map = init_map("map");
-      // init_map("map");
       update_options();
       init_events();
     }
@@ -158,7 +155,7 @@
     /*
     PUBLIC INTERFACE
     */
-    public_interace = {};
+    public_interface = {};
 
     function getWqImage(which) {
       console.log(which);
@@ -215,24 +212,26 @@
       m_option1 = $('#option1').val();
       m_option2 = $('#option2').val();
       m_option3 = $('#option3').val();
-      interaction1 = $('#type').val();
+      // interaction1 = $('#type').val();
       $('#loadmap').on('click', function(e){
            e.preventDefault(); 
            getWqImage(map);
       });
-      interaction1.onchange = function(){
-        map.removeInteraction(draw);
-        const typeval = $('#type').val();
-        addInteraction(typeval, map);
-      };
+      // interaction1.onchange = function(){
+      //   map.removeInteraction(draw);
+      //   const typeval = $('#type').val();
+      //   addInteraction(typeval, map);
+      // };
+      const splits = document.querySelector('.splits');
 
-      $('#splitter').on('click', function(e){
+      // $('#splitter').on('select', function(e){
+        splits.addEventListener('change', function(e) {
         let split = $('#splitter').val();
-        if (split == 1) {
-          document.getElementById("map").style.display = "None";
-          document.getElementById("loadmap").style.display ="None"
-          document.getElementById("maps4").style.display = "None";
-          document.getElementById("screen4btns").style.display = "None";
+        if (split == 2) {
+          document.getElementById("map").style.display = "none";
+          document.getElementById("loadmap").style.display ="none";
+          document.getElementById("maps4").style.display = "none";
+          document.getElementById("screen4btns").style.display = "none";
           $(".ol-viewport").remove();
           document.getElementById("maps2").style.display = "inline-block";
           // document.getElementById("map22").style.display = "inline-block";
@@ -263,11 +262,11 @@
            e.preventDefault(); 
            getWqImage(map2);
           });
-        } else if (split == 2) {
-          document.getElementById("map").style.display = "None";
-          document.getElementById("loadmap").style.display ="None";
-          document.getElementById("screen2btns").style.display = "None";
-          document.getElementById("maps2").style.display = "None";
+        } else if (split == 4) {
+          document.getElementById("map").style.display = "none";
+          document.getElementById("loadmap").style.display ="none";
+          document.getElementById("screen2btns").style.display = "none";
+          document.getElementById("maps2").style.display = "none";
           $(".ol-viewport").remove();
           document.getElementById("maps4").style.display = "inline-block";
           document.getElementById("screen4btns").style.display = "inline-block";
@@ -339,11 +338,27 @@
            e.preventDefault(); 
            getWqImage(map4);
           });
+        } else {
+          if (document.getElementById("maps2").style.display != "none") {
+            console.log("two maps detected");
+            document.getElementById("maps2").style.display = "none";
+            document.getElementById("screen2btns").style.display = "none";
+            $(".ol-viewport").remove();
+          } else if (document.getElementById("maps4").style.display != "none") {
+            console.log("Four maps detected");
+            document.getElementById("maps4").style.display = "none";
+            document.getElementById("screen4btns").style.display = "none";
+            $(".ol-viewport").remove();
+          }
+          document.getElementById("map").style.display = "inline-block";
+          document.getElementById("loadmap").style.display ="inline-block";
+          $(".ol-viewport").remove();
+          init_map("map");
         }
       });
 
       init_all();
 
     });
-    return public_interace;
+    return public_interface;
   }());

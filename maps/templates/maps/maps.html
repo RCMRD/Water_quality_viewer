@@ -7,7 +7,7 @@
 <aside class="col-3">
 	<!-- <strong>LatLon Values: </strong>
 		<small id="mouse-position"></small> -->
-	<form class="form-inline">
+	<!-- <form class="form-inline">
 		{% csrf_token %}
       <label for="type">Geometry type: &nbsp;</label>
       <select class="form-control mr-2 mb-2 mt-2" id="type">
@@ -18,44 +18,47 @@
         <option value="None">None</option>
       </select>
       <input class="form-control mr-2 mb-2 mt-2" type="button" value="Undo" id="undo">
-    </form>
-	<h3>App Navigation</h5>
+    </form> -->
+	<p class="h3 fw-bolder">App Navigation</p>
 		<form method="POST">
 			{% csrf_token %}
 			<div id="navpanel" data-datasets="{{ datasets }}">
-				<select id="option1">
+				<select id="option1" class="form-select form-select-sm mb-1">
 					<option value="...">Select Map Type</option>
 				</select>
-				<select id="option2">
+				<select id="option2"  class="form-select form-select-sm mb-1">
 					<option value="...">Select a Dataset</option>
 				</select>
-				<select id="option3">
+				<select id="option3"  class="form-select form-select-sm mb-1">
 					<option value="...">Select a Sensor</option>
 				</select>
-				<select id="option4">
+				<select id="option4"  class="form-select form-select-sm mb-1">
 					<option value="...">Select a Product</option>
 				</select>
-				<label for="start_date" class="date">Start Date:</label>
+				<div class="date">
+				<label for="start_date" class="date mt-1 mb-1"><strong>Start Date: </strong></label>
 				<input id="start_date" type="date" class="form-control buttontheme" >
-				<label for="end_date" class="date">End Date:</label>
+				<label for="end_date" class="date mb-1 mt-1"><strong>End Date: </strong></label>
 				<input id="end_date" type="date" class="form-control buttontheme" >
-				<button id="loadmap" type="submit" class="btn btn-success">Load Map</button>
+				</div>
+				<button id="loadmap" type="submit" class="btn btn-success mt-1">Load Map</button>
 			</div>
 	</form>
-	<label for="splitter">Split Canvas</label>
-		<select id="splitter">
-			<option value="1">2 Screens</option>
-			<option value="2">4 Screens</option>
+	<label for="splitter" class="mb-1 mt-1"><strong>Split Canvas:</strong></label>
+		<select id="splitter" class="splits">
+			<option value="1">Default Screen</option>
+			<option value="2">2 Screens</option>
+			<option value="4">4 Screens</option>
 		</select>
-		<div id="screen2btns">
-		<button id="loadmap1" type="submit" class="btn btn-success">Load to Screen A</button>
-		<button id="loadmap2" type="submit" class="btn btn-success">Load to Screen B</button>
+		<div id="screen2btns" role="group" class="mb-1 btn-group me-2">
+		<button id="loadmap1" type="submit" class="btn btn-outline-success mb-1 mt-1">Load Map A</button>
+		<button id="loadmap2" type="submit" class="btn btn-outline-success mb-1">Load Map B</button>
 		</div>
-		<div id="screen4btns">
-		<button id="loadmap41" type="submit" class="btn btn-success">Load to Screen A</button>
-		<button id="loadmap42" type="submit" class="btn btn-success">Load to Screen B</button>
-		<button id="loadmap43" type="submit" class="btn btn-success">Load to Screen C</button>
-		<button id="loadmap44" type="submit" class="btn btn-success">Load to Screen D</button>
+		<div id="screen4btns" role="group" class="mb-1 me-2 btn-group">
+		<button id="loadmap41" type="submit" class="btn btn-outline-success mb-1 mt-1">Load Map A</button>
+		<button id="loadmap42" type="submit" class="btn btn-outline-success mb-1 mt-1">Load Map B</button>
+		<button id="loadmap43" type="submit" class="btn btn-outline-success mb-1">Load Map C</button>
+		<button id="loadmap44" type="submit" class="btn btn-outline-success mb-1">Load Map D</button>
 		</div>
 </aside>
 
@@ -66,8 +69,8 @@
 		<div id="map22" class="maps2 right"></div>
 	</div>
 	<div id="maps4" class="split">
-		<div id="map41" class="maps4 left"></div>
-		<div id="map42" class="maps4 right"></div>
+		<div id="map41" class="maps4 left mb-2"></div>
+		<div id="map42" class="maps4 right mb-2"></div>
 		<div id="map43" class="maps4 left"></div>
 		<div id="map44" class="maps4 right"></div>
 	</div>
@@ -77,13 +80,10 @@
 {% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.8.1/css/ol.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="{% static 'maps/css/maps.css'%}">
 {% endblock %}
 
 {% block scripts %}
-  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.7.0/build/ol.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="{% static 'maps/js/ajax.js' %}"></script>
   <script type="text/javascript" src="{% static 'maps/js/maps.js' %}"></script>
 {% endblock %}

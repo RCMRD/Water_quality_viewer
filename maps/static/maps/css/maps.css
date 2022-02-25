@@ -1,5 +1,6 @@
 #map {
 	height: 500px;
+	width: 100%;
 }
 .map:-webkit-full-screen {
 	height: 100%;
@@ -11,12 +12,24 @@
 .map:fullscreen {
 	height: 100%;
 }
-select, input {
+select {
 	width: 100%;
+}
+label > .date {
+	width: 35%;
+	float: right;
+	font-size: 20px;
 }
 aside {
 	height: 500px;
 	overflow: auto;
+}
+button {
+	width: 100%;
+}
+#screen4btns > button {
+	width: 48%;
+	position: relative;
 }
 #maps2, #maps4 {
 	height: 100%;

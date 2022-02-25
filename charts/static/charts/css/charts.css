@@ -1,7 +1,14 @@
 #map {
 	height: 200px;
 }
+aside {
+	overflow: auto;
+	height: 500px;
+}
 select, input {
+	width: 100%;
+}
+button {
 	width: 100%;
 }
 #charts {
