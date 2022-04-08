@@ -10,18 +10,18 @@ const app_control = (function(){
     });
 
     init_map = function () {
-    const raster = new ol.layer.Tile({
-      source: new ol.source.OSM(),
-    });
+      const raster = new ol.layer.Tile({
+        source: new ol.source.OSM(),
+      });
 
-    map = new ol.Map({
-      layers: [raster, vector],
-      target: 'map',
-      view: new ol.View({
-        center: [3669401.896473434, -75795.50527694414],
-        zoom: 4,
-      }),
-    });
+      map = new ol.Map({
+        layers: [raster, vector],
+        target: 'map',
+        view: new ol.View({
+          center: [3669401.896473434, -75795.50527694414],
+          zoom: 4,
+        }),
+      });
     }
 
     update_options = function(){
@@ -44,7 +44,7 @@ const app_control = (function(){
           $("#option3").hide();
           $("#option4").hide();
           $("label[class='date']").hide();
-          $("input[type='date'").hide();
+          $("input[type='date']").hide();
 
           for (const lulcs in options[m_option1]['options']) {
             if (lulcs != "...") {
