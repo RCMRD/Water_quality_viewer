@@ -1,14 +1,53 @@
 {% extends 'main/base.html' %}
-{% load static %}
+{% load static crispy_forms_tags %}
 
 {% block main %}
 <div class="row">
 <aside class="col-3">
-	<form method="POST" enctype="multipart/form-data">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit">Upload</button>
-	</form>
+	<!-- <div id="uploadfile"> -->
+		<form method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ csvform|crispy }}
+			<!-- {{ form.as_p }}
+				<p>{{ form.non_field_errors }}</p>
+	      <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+	      <p>
+	          {{ form.docfile.errors }}
+	          {{ form.docfile }} -->
+	      <!-- </p> -->
+	      <!-- <p><input type="submit" value="Upload" /></p> -->
+			<button type="submit" class="btn btn-primary">Upload CSV</button>
+		</form>
+
+		<table class="table">
+			<thead>
+				<th>FileName</th>
+				<th>Download</th>
+				<th>Delete</th>
+				<th>Load</th>
+			</thead>
+			<tbody>
+				{% for file in csvs %}
+				<tr>
+					<td>{{ file.title }}</td>
+					<td><a href="{{ file.csv.url }}" class="btn btn-primary btn-sm">Download</a></td>
+					<td>
+						<form method="post" action="{% url 'delete_csv' file.pk %}">
+						{% csrf_token %}
+						<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+						</form>
+					</td>
+					<td>
+						<form method="post" class="fileget" data-{{ file.pk }}="{{ file.pk }}" >
+							{% csrf_token %}
+							<button type="submit" class="btn btn-success btn-sm">Load</button>
+						</form>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	<!-- </div> -->
 	<p class="h3 fw-bolder">Choose Variables to Query</p>
 		<form method="POST">
 			{% csrf_token %}
@@ -25,8 +64,14 @@
 
 	
 </aside>
-<content class="col-9">
-	<table class="table" data-filecontent={{ filecontent }} id="filecontent">
+<content class="col-9 mb-1">
+	<div class="row" style="height: 35%;">
+		<div id="map"></div>
+	</div>
+	<div class="row" id="chart" style="height: 60%;">
+		
+	</div>
+	<!-- <table class="table" data-filecontent={{ filecontent }} id="filecontent">
 		<thead>
 			<th>#</th>
 		</thead>
@@ -36,7 +81,7 @@
 			</tr>
 			<tr id="lon">
 				<th>Longitude</th>
-			</tr>
+			</tr> -->
 		<!-- 
 			{% for line in filecontent %}
 			<tr>
@@ -52,6 +97,7 @@
 {% endblock %}
 
 {% block scripts %}
+	<script type="text/javascript" href="{% static 'main/js/main.js' %}" ></script>
   <script type="text/javascript" src="{% static 'query/js/query.js' %}"></script>
 {% endblock %}
 
