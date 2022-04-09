@@ -17,8 +17,8 @@ def query(request):
 			csvform = CsvForm(request.POST, request.FILES)
 			if csvform.is_valid():
 				csvform.save()
-				file = Csv.objects.get(title="one")
-				print(file.csv)
+				# file = Csv.objects.get(title="one")
+				# print(file.csv)
 			csvs = Csv.objects.all()
 		else:
 			csvform = CsvForm()
@@ -36,8 +36,8 @@ def query(request):
 def delete_csv(request, pk):
 	if request.method == 'POST':
 		csvfile = Csv.objects.get(pk=pk)
+		csvfile.csv.delete()
 		csvfile.delete()
-
 	return redirect('query')
 
 @csrf_exempt
