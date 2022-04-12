@@ -143,21 +143,24 @@ const app_control = (function() {
                 // plot point data
                 $('#pntplt').on('click', function(e){
                     e.preventDefault();
-                    const platform = $('platformSs').val();
-                    const sensor = $('sensorSs').val();
-                    const product = $('productSs').val();
+                    const platform = $('#platformSs').val();
+                    const sensor = $('#sensorSs').val();
+                    const product = $('#productSs').val();
                     const compiledData = [];
-                    console.log(qdata);
 
-                    JSON.parse(qdata).dataframe.forEach((d) => {
-                        if (product === d.product && sensor === d.sensor && platform === d.platform && feature.get('name')) {
+                    qdata.forEach((d) => {
+                        if ( product === d.product && sensor === d.sensor && platform === d.platform && feature.get('name') === d.geom_id ){
                             const darray = [];
-                            darray.push(parseInt(d.time) * 1000);
-                            darray.push(d.value);
+                            darray.push(d.time);
+                            if (d.value === -9999){
+                                darray.push(null); 
+                            } else {
+                                darray.push(d.value);
+                            }
                             compiledData.push(darray);
                         }
                     });
-                    console.log(compiledData);
+                    create_chart(product, compiledData);
 
                 });
 
@@ -176,7 +179,7 @@ const app_control = (function() {
     }
 
 
-    function create_chart(product,series, dateS,dateInt){
+    function create_chart(product,series){
         var options = {
         chart: {
             renderTo: 'chart',
@@ -196,8 +199,8 @@ const app_control = (function() {
         series: [{
             name: product,
             data: series,
-            pointStart: Date.UTC(2010, 0, 0),
-            pointInterval: 3600 * 1000 * dateInt 
+            // pointStart: Date.UTC(2010, 0, 0),
+            // pointInterval: 3600 * 1000 * dateInt 
         }]
         };
 
@@ -316,7 +319,7 @@ const app_control = (function() {
         chcks = $('#chckpanel').data('checks');
         init_all();
         map.addOverlay(popup);
-        create_chart(products[0],pnt1series[0],'2010,01,01',24);
+        // create_chart(products[0],pnt1series[0],'2010,01,01',24);
     });
     return public_interface;
 }());
