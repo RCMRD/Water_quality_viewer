@@ -267,7 +267,7 @@ const app_control = (function() {
         //     anchor: [0.5, 46],
         //     anchorXUnits: 'fraction',
         //     anchorYUnits: 'pixels',
-        //     src: static_url + .'/query/imgs/loc.jpg',
+        //     src: static_url + 'query/imgs/loc.jpg',
         //   }),
         // });
         // feature.setStyle(iconStyle);
