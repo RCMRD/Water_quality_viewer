@@ -115,9 +115,11 @@
             return;
           };
         }
+    
     /*
     Initialize Functions
     */
+    
     init_map = function(target){
       let raster = new ol.layer.Tile({
         source: new ol.source.OSM()

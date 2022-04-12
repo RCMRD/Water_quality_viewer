@@ -2,6 +2,9 @@
 {% load static crispy_forms_tags %}
 
 {% block main %}
+<script>
+	const static_url = "{% static '' %}";
+</script>
 
 <div class="row">
 <aside class="col-3">
@@ -67,8 +70,32 @@
 </aside>
 <content class="col-9 mb-1">
 	<div class="row" style="height: 35%;">
-		<div id="map"></div>
+		<div id="map">
+			<div></div>
+			<div id="popover"></div>
+		</div>
 	</div>
+	<form method="POST">
+		{% csrf_token %}
+		<div id="chartq">
+			<label for="platformS">View Platform</label>
+			<div id="platformS">
+				<select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="platformSs">
+		   </select>
+			</div>
+			<label for="sensorS">View Sensor</label>
+			<div id="sensorS">
+				<select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="sensorSs">
+		   </select>
+			</div>
+			<label for="productS">View Product</label>
+			<div id="productS">
+				<select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="productSs">
+		   </select>
+			</div>
+		</div>
+		<button id="pntplt" type="submit" class="btn btn-success mt-1">Chart Point</button>
+	</form>
 	<div class="row" id="chart" style="height: 60%;">
 		
 	</div>
