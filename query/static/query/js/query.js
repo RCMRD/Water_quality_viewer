@@ -1,17 +1,24 @@
 const app_control = (function() {
     var chcks, map, product,series,dateS, dateInt, products;
-    var update_chcks, init_all, public_interface, add_table_column,
-    read_csv_file, init_map, init_table_upload, create_chart, loadCsv;
+    var update_chcks, init_all, init_events, public_interface, add_table_column,
+    read_csv_file, init_map, init_table_upload, create_chart, loadCsv,
+    get_query_opts, qdata;
 
     /*
     VARIABLES INITIALIZATIONS
     */
+    const source = new ol.source.Vector({wrapX: false});   
+    const vector = new ol.layer.Vector({
+      source: source
+    });
+    const popelement = document.getElementById('popup');
 
-    // var csvsampledata =[
-    var point1 = [33,-1];
-    var point2 = [32,-2];
-    var point3 = [33.3,0];
-    // console.log(csvsampledata.indexOf('/n'));
+    const popup = new ol.Overlay({
+        element: popelement,
+        positioning: 'bottom-center',
+        stopEvent: false
+    });
+
     var products = ['chlorophyll', 'Trophic State'];
     var pnt1series = [[12, 15,18],[30,41,45]];
     var pnt2series = [[10, 11,19],[13,14,24]];
@@ -21,7 +28,6 @@ const app_control = (function() {
     DEFINE THE FUNCTIONS
     */  
     update_chcks = function(){
-        chcks = $('#chckpanel').data('checks');
         for (const value in chcks) {
             $('#chckpanel').append($('<div class="form-check">').append(
                     ($('<input>', {
@@ -43,31 +49,6 @@ const app_control = (function() {
     init_map = function(target){
       let raster = new ol.layer.Tile({
         source: new ol.source.OSM()
-      });
-      const features = [];
-      let feature1 = new ol.Feature({
-        geometry: new ol.geom.Point(ol.proj.fromLonLat(point1)),
-        labelPoint: new ol.geom.Point(ol.proj.fromLonLat(point1)),
-        name: 'Point1'
-        });
-      let feature2 = new ol.Feature({
-        geometry: new ol.geom.Point(ol.proj.fromLonLat(point2)),
-        labelPoint: new ol.geom.Point(ol.proj.fromLonLat(point2)),
-        name: 'Point2'
-        });
-      let feature3 = new ol.Feature({
-        geometry: new ol.geom.Point(ol.proj.fromLonLat(point3)),
-        labelPoint: new ol.geom.Point(ol.proj.fromLonLat(point3)),
-        name: 'Point3'
-        });
-      const source = new ol.source.Vector();
-      features.push(feature1);
-      features.push(feature2);
-      features.push(feature3);
-      source.addFeatures(features);
-
-      const csvpoints = new ol.layer.Vector({
-        source: source,
       });
 
       const csvlyr = new ol.layer.Tile({
@@ -91,7 +72,7 @@ const app_control = (function() {
                 },
             })
             ]),
-        layers: [raster, csvpoints],
+        layers: [raster],
         target: target,
         view: new ol.View({
           center: ol.proj.fromLonLat([32.9460, -1.1315]),
@@ -101,78 +82,99 @@ const app_control = (function() {
       });
     }
 
-    get_products = function(){
-        products = [];
+    get_query_opts = function(){
+        products = {};
         $("input[type='checkbox']").click(function(e){
             if ($(this).prop("checked")) {
                 if (typeof products[e.target.id] === 'undefined'){
-                    products.push(e.target.id);
-                    console.log(products);
+                    products[e.target.id] = e.target.id;
+                    for (const key in chcks ) {
+                        if (key == this.id ){
+                            const strO = JSON.stringify(this.id);
+                            const pltfms = $('#platformSs').val();
+                            if (!pltfms || pltfms != chcks[this.id]['platform']) {
+                                $('#platformSs').append($('<option>', {
+                                    value: chcks[strO],
+                                    text: chcks[this.id]['platform']
+                                }));
+                            }
+                            const snsrs = $('#sensorSs').val();
+                            if (!snsrs || snsrs != chcks[this.id]['sensor']) {
+                                $('#sensorSs').append($('<option>', {
+                                    value: chcks[strO],
+                                    text: chcks[this.id]['sensor']
+                                }));
+                            }
+                            const prdcts = $('#productSs').val();
+                            if (!prdcts || prdcts != chcks[this.id]['index']) {
+                                $('#productSs').append($('<option>', {
+                                    value: chcks[strO],
+                                    text: chcks[this.id]['index']
+                                }));
+                            }
+                        }
+                    }
                 }
             } else if ($(this).prop("checked") == false) {
-                removeA(products, this.id);
-                    console.log(products);
+                delete products[this.id];
+                // const strD = JSON.stringify(this.id);
+                // $("#platformSs option[value="+strD+"]").remove();
+                // $("#sensorSs option[value="+strD+"]").remove();
+                // $("#productSs option[value="+strD+"]").remove();
             } 
         });
+        $('#start_date').on('change',function(e){
+            products["startDate"] = $('#start_date').val();
+        });
+        $('#end_date').on('change',function(e){
+            products["endDate"] = $('#end_date').val();
+        });
+
         return products;
     }
 
-    init_table_upload = function () {
-        $('#uploadfile').on('submit', function(e){
-            // e.preventDefault();
+    init_events = function(){
+        map.on('click', function(evt){
+            const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+                return feature;
+            });
+            if (feature) {
 
-            var Upload = function(file){
-                this.file = file
-            };
-            Upload.prototype.getType = function(){
-                return this.file.type
-            };
-            Upload.prototype.getSize = function(){
-                return this.file.size
-            };
-            Upload.prototype.getName = function(){
-                return this.file.name
-            };
-            Upload.prototype.doUpload = function(){
-                var that = this;
-                var formData = new FormData();
-                formData.append("file", this.file, this.getName());
-                formData.append("upload_file", true);
-                console.log(formData);
-                $.ajax({
-                    type: "POST",
-                    url: "{% url 'mcfe' %}",
-                    async: true,
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (data) {
-                        console.log(data);
-                    }
+                // plot point data
+                $('#pntplt').on('click', function(e){
+                    e.preventDefault();
+                    const platform = $('platformSs').val();
+                    const sensor = $('sensorSs').val();
+                    const product = $('productSs').val();
+                    const compiledData = [];
+                    console.log(qdata);
+
+                    JSON.parse(qdata).dataframe.forEach((d) => {
+                        if (product === d.product && sensor === d.sensor && platform === d.platform && feature.get('name')) {
+                            const darray = [];
+                            darray.push(parseInt(d.time) * 1000);
+                            darray.push(d.value);
+                            compiledData.push(darray);
+                        }
+                    });
+                    console.log(compiledData);
+
                 });
+
+                // Show PnG
+                popup.setPosition(evt.coordinate);
+                $(popelement).popover({
+                    placement:'top',
+                    html: true,
+                    content: feature.get('name'),
+                });
+                $(popelement).popover('show');
+            } else {
+                $(popelement).popover('dispose');
             }
-            
         });
     }
 
-    read_csv_file = function(){
-        const datavals = $('#filecontent').data('filecontent');
-        console.log(datavals);
-        const length = datavals.length;
-
-        for (var i in datavals) {
-            $('thead th').append($('<th>', {
-                text: i
-            }));
-            // $('#lat').append($('<td>', {
-            //         text: i
-            //     }));
-            // $('#lon').append($('<td>',{
-            //         text: i
-            //     }));
-        }
-    }
 
     function create_chart(product,series, dateS,dateInt){
         var options = {
@@ -213,53 +215,82 @@ const app_control = (function() {
         return arr;
     }
 
-    function loadCsv(){
+    function loadCsvToMap(){
         $('.fileget').on('click', function(e){
             e.preventDefault();
             var csvtitle = $(this).data();
-            console.log(csvtitle);
             var xhr = $.ajax({
                 type: "POST",
                 url: "get_csv",
-                // async: true,
                 dataType: 'json',
                 data: csvtitle,
                 cache: csvtitle,
-                // contentType: false,
-                // processData: false,
             });
             xhr.done(function (data){
                 if ("success" in data) {
-                    console.log("success");
-                    console.log(data);
+                    const vals = data.data;
+                    const features = [];
+                    for (let x=0; x < vals.length; x++) {
+                        features.push(createPointFeature(vals[x]));
+                    }
+                    source.clear();
+                    const sourceobject = createSourceForFeatures(features);
+
+                    // Add source as layer in the map object
+                    map.addLayer(sourceobject);
                 }
             });
-                // success: function (data) {
-                //     console.log(data);
-                //     }
-                // });
-            // console.log("{% url 'lcm' file.pk %}");
-            // $.get("", function(data,status){
-            //     console.log("Data: " + data + "\nStatus: " + status);
-            // });
+            $('#qfile').on('click', function(e) {
+                e.preventDefault();
+                // Query CSV Data
+                products["filetitle"] = Object.values(csvtitle)[0];
+                // ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326')
+                queryData(products);
+            });
+        });
+    }
+
+    function createPointFeature(latlonarr){
+        let lonval = latlonarr.lon;
+        let latval = latlonarr.lat;
+        let point = [lonval, latval];
+        let feature = new ol.Feature({
+            geometry: new ol.geom.Point(ol.proj.fromLonLat(point)),
+            labelPoint: new ol.geom.Point(ol.proj.fromLonLat(point)),
+            name: latlonarr.id
+        });
+        // const iconStyle = new ol.style.Style({
+        //   image: new ol.style.Icon({
+        //     anchor: [0.5, 46],
+        //     anchorXUnits: 'fraction',
+        //     anchorYUnits: 'pixels',
+        //     src: static_url + .'/query/imgs/loc.jpg',
+        //   }),
         // });
-        // // const connect = new XMLHttpRequest();
-        // // connect.open('GET', "{{ file.csv.url }}");
-        // // connect.onload = function() {
-        // //     const csv = connect.responseText;
-        // //     console.log(csv);
-        // // }
-        // $('#fileget').on('click', function(e){
-        //     e.preventDefault();
-        //     const connect = new XMLHttpRequest();
-        //     connect.open('GET', "{{ file.csv.url }}");
-        //     connect.onload = function() {
-        //         const csv = connect.responseText;
-        //         console.log(csv);
-        //     }
-        //     // $.get({{ file.csv.url }}, function(data, status){
-        //     //     console.log(data + status);
-        //     // });
+        // feature.setStyle(iconStyle);
+
+        return feature
+    }
+
+    function createSourceForFeatures(features){
+        source.addFeatures(features);
+        const csvpoints = new ol.layer.Vector({
+            source: source,
+        });
+        return csvpoints
+    }
+
+    function queryData(query_dict){
+        var xhr = $.ajax({
+                type: "POST",
+                url: "query_csv",
+                dataType: 'json',
+                data: query_dict,
+                cache: query_dict,
+        });
+        xhr.done(function (data){
+            qdata = data['dataframe'];
+           return qdata 
         });
     }
 
@@ -269,11 +300,9 @@ const app_control = (function() {
     init_all = function(){
         map = init_map("map");
         update_chcks();
-        get_products();
-        loadCsv();
-        // add_table_column();
-        // init_table_upload();
-        // read_csv_file();
+        loadCsvToMap();
+        get_query_opts();
+        init_events();
     }
     /*
     PUBLIC INTERFACE
@@ -284,13 +313,9 @@ const app_control = (function() {
     RUN THE FUNCTIONS
     */
     $(function(){
+        chcks = $('#chckpanel').data('checks');
         init_all();
-        $('#qfile').on('click', function(e) {
-            e.preventDefault();
-            // console.log(e);
-            // read_csv_file();
-            console.log(products);
-        });
+        map.addOverlay(popup);
         create_chart(products[0],pnt1series[0],'2010,01,01',24);
     });
     return public_interface;
