@@ -65,13 +65,14 @@ const app_control = (function() {
 
       return new ol.Map({
         controls: ol.control.defaults().extend(controls),
-        interactions: ol.interaction.defaults().extend([
-            new ol.interaction.Select({
-                condition: function(evt) {
-                    return evt.type == 'pointermove' || evt.type == 'singleclick';
-                },
-            })
-            ]),
+        interactions: ol.interaction.defaults(),
+        // .extend([
+        //     new ol.interaction.Select({
+        //         condition: function(evt) {
+        //             return evt.type == 'pointermove' || evt.type == 'singleclick';
+        //         },
+        //     })
+            // ]),
         layers: [raster],
         target: target,
         view: new ol.View({
@@ -262,6 +263,20 @@ const app_control = (function() {
             labelPoint: new ol.geom.Point(ol.proj.fromLonLat(point)),
             name: latlonarr.id
         });
+<<<<<<< HEAD
+        const iconStyle = new ol.style.Style({
+          image: new ol.style.Icon({
+            anchor: [0.5, 46],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            opacity: 0.75,
+            size: [715, 715],
+            src: static_url + 'query/imgs/loc.png',
+            scale: 0.1,
+          }),
+        });
+        feature.setStyle(iconStyle);
+=======
         // const iconStyle = new ol.style.Style({
         //   image: new ol.style.Icon({
         //     anchor: [0.5, 46],
@@ -271,6 +286,7 @@ const app_control = (function() {
         //   }),
         // });
         // feature.setStyle(iconStyle);
+>>>>>>> main
 
         return feature
     }
