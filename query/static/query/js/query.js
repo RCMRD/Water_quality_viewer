@@ -263,7 +263,7 @@ const app_control = (function() {
             labelPoint: new ol.geom.Point(ol.proj.fromLonLat(point)),
             name: latlonarr.id
         });
-<<<<<<< HEAD
+        
         const iconStyle = new ol.style.Style({
           image: new ol.style.Icon({
             anchor: [0.5, 46],
@@ -276,17 +276,6 @@ const app_control = (function() {
           }),
         });
         feature.setStyle(iconStyle);
-=======
-        // const iconStyle = new ol.style.Style({
-        //   image: new ol.style.Icon({
-        //     anchor: [0.5, 46],
-        //     anchorXUnits: 'fraction',
-        //     anchorYUnits: 'pixels',
-        //     src: static_url + 'query/imgs/loc.jpg',
-        //   }),
-        // });
-        // feature.setStyle(iconStyle);
->>>>>>> main
 
         return feature
     }

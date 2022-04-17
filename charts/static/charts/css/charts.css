@@ -1,9 +1,9 @@
 #map {
-	height: 200px;
+	height: 300px;
 }
 aside {
 	overflow: auto;
-	height: 500px;
+	height: 650px;
 }
 select, input {
 	width: 100%;
@@ -12,5 +12,5 @@ button {
 	width: 100%;
 }
 #charts {
-	height: 500px;
+	height: 650px;
 }

@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from .geechartfunctions import getChart
 from maps.visparams import vis, links
+import json
 
 def get_chart(request):
 	return_obj = {}
@@ -13,11 +14,13 @@ def get_chart(request):
 			mission = info.get('mission')
 			sensor = info.get('sensor')
 			product = info.get('product')
-			scale = info.get('scale')
-			coords = info.get('coordinates')
+			# scale = info.get('scale', 30)
+			scale = 30
+			coords = json.loads(info.get('coordinates'))
+			reducer = 'min'
 			print("here are the coordinates")
 			print(coords)
-			chartValues = getChart(links[mission][sensor]['addr'], product,timeS, timeE, coords, 'min')
+			chartValues = getChart(links[mission][sensor]['addr'], product,timeS, timeE, coords, scale, reducer)
 			return_obj["values"] = chartValues
 			return_obj["success"] = "success"
 
