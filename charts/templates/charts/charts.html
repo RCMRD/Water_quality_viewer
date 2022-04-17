@@ -2,31 +2,32 @@
 {% load static %}
 
 {% block main %}
+<script>
+	const static_url = "{% static '' %}";
+</script>
 <div class="row">
-	<aside class="col-3">
+	<aside class="col-4">
+		<form method="POST">
+			<label for="type"><strong>Geometry type: &nbsp;</strong></label>
+      <select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="type">
+        <option value="None">None</option>
+        <option value="Point">Point</option>
+        <option value="Polygon">Polygon</option>
+      </select>
+		</form>
+
 		<h3>App Navigation</h3>
 			<div id="map">
 			</div>
 			<form method="POST" id="navpanel" data-datasets="{{ datasets }}">
 				{% csrf_token %}
 				{{ form.as_p}}
-				<label for="charttype"><strong>Chart type: &nbsp; </strong></label>
+				<!-- <label for="charttype"><strong>Chart type: &nbsp; </strong></label>
 	      <select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="charttype">
 	      	<option value="...">Select Chart Type</option>
 	        <option value="scatter">Scatter Plot</option>
 	        <option value="line">Line Plot</option>
-	      </select>
-	      <label for="type"><strong>Geometry type: &nbsp;</strong></label>
-		      <select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="type">
-		        <!-- <option value="...">Select Geometry Type</option> -->
-		        <option value="Point">Point</option>
-		        <option value="Polygon">Polygon</option>
-		        <!-- <option value="Circle">Circle</option> -->
-		        <!-- <option value="Square">Square</option> -->
-		        <option value="Box">Box</option>
-		        <!-- <option value="Star">Star</option> -->
-		        <option value="None">None</option>
-		      </select>
+	      </select> -->
 		    <label for="navpanel"><strong>Data Select:</strong></label>
 		    <div id="navpanel" data-datasets="{{ datasets }}">
 						<select id="option1" class="form-select form-select-sm mb-1">
@@ -52,7 +53,7 @@
 			</form>
 	</aside>
 
-	<section class="col-9">
+	<section class="col-8">
 		<div id="container">
 			
 		</div>
