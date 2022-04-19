@@ -18,3 +18,7 @@ def home(request):
 		'imageposts' : imageposts
 	}
 	return render(request, 'main/home.html', context)
+
+def contact(request):
+	context = {}
+	return render(request, 'main/contact.html', context)

@@ -2,58 +2,45 @@
 {% load static crispy_forms_tags %}
 
 {% block main %}
-<script>
-	const static_url = "{% static '' %}";
-</script>
-
 <div class="row">
-<aside class="col-3">
-	<!-- <div id="uploadfile"> -->
-		<form method="POST" enctype="multipart/form-data">
-			{% csrf_token %}
-			{{ csvform|crispy }}
-			<!-- {{ form.as_p }}
-				<p>{{ form.non_field_errors }}</p>
-	      <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
-	      <p>
-	          {{ form.docfile.errors }}
-	          {{ form.docfile }} -->
-	      <!-- </p> -->
-	      <!-- <p><input type="submit" value="Upload" /></p> -->
-			<button type="submit" class="btn btn-primary">Upload CSV</button>
+	<aside class="col-3">
+		<form method="POST" enctype="multipart/form-data" id="csvupload">
+			<div id="uploadform">
+				{% csrf_token %}
+				{{ csvform|crispy }}
+			</div>
+			<button id="csvupbtn" type="submit" class="btn btn-primary">Upload CSV</button>
 		</form>
-
-		<table class="table">
-			<thead>
-				<th>FileName</th>
-				<th>Download</th>
-				<th>Delete</th>
-				<th>Load</th>
-			</thead>
-			<tbody>
-				{% for file in csvs %}
-				<tr>
-					<td>{{ file.title }}</td>
-					<td><a href="{{ file.csv.url }}" class="btn btn-primary btn-sm">Download</a></td>
-					<td>
-						<form method="post" action="{% url 'delete_csv' file.pk %}">
-						{% csrf_token %}
-						<button type="submit" class="btn btn-danger btn-sm">Delete</button>
-						</form>
-					</td>
-					<td>
-						<form method="post" class="fileget" data-{{ file.pk }}="{{ file.pk }}" >
+			<table class="table">
+				<thead>
+					<th>FileName</th>
+					<th>Download</th>
+					<th>Delete</th>
+					<th>Load</th>
+				</thead>
+				<tbody>
+					{% for file in csvs %}
+					<tr>
+						<td>{{ file.title }}</td>
+						<td><a href="{{ file.csv.url }}" class="btn btn-primary btn-sm">Download</a></td>
+						<td>
+							<form method="post" action="{% url 'delete_csv' file.pk %}">
 							{% csrf_token %}
-							<button type="submit" class="btn btn-success btn-sm">Load</button>
-						</form>
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	<!-- </div> -->
-	<p class="h3 fw-bolder">Choose Variables to Query</p>
-		<form method="POST">
+							<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+							</form>
+						</td>
+						<td>
+							<form method="post" class="fileget" data-{{ file.pk }}="{{ file.pk }}" >
+								{% csrf_token %}
+								<button type="submit" class="btn btn-success btn-sm">Load</button>
+							</form>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		<p class="h3">Choose Variables to Query</p>
+		<form method="POST" id="popdata">
 			{% csrf_token %}
 			<div id="chckpanel" data-checks="{{ checks }}">
 			</div>
@@ -62,71 +49,48 @@
 			<label for="end_date" class="date mb-1 mt-1"><strong>End Date: </strong></label>
 			<input id="end_date" type="date" class="form-control buttontheme" >
 			<button id="qfile" type="submit" class="btn btn-success mt-1">Query Files</button>
-	</form>
-
-	<!-- <div id="map" style="width:80%; height:90%;"></div> -->
-
-	
-</aside>
-<content class="col-9 mb-1">
-	<div class="row" style="height: 35%;">
-		<div id="map">
-			<div></div>
-			<div id="popover"></div>
-		</div>
-	</div>
-	<form method="POST">
-		{% csrf_token %}
-		<div id="chartq">
-			<label for="platformS">View Platform</label>
-			<div id="platformS">
-				<select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="platformSs">
-		   </select>
-			</div>
-			<label for="sensorS">View Sensor</label>
-			<div id="sensorS">
-				<select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="sensorSs">
-		   </select>
-			</div>
-			<label for="productS">View Product</label>
-			<div id="productS">
-				<select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="productSs">
-		   </select>
-			</div>
-		</div>
-		<button id="pntplt" type="submit" class="btn btn-success mt-1">Chart Point</button>
-	</form>
-	<div class="row" id="chart" style="height: 60%;">
+		</form>
 		
-	</div>
-	<!-- <table class="table" data-filecontent={{ filecontent }} id="filecontent">
-		<thead>
-			<th>#</th>
-		</thead>
-		<tbody>
-			<tr id="lat">
-				<th>Latitude</th>
-			</tr>
-			<tr id="lon">
-				<th>Longitude</th>
-			</tr> -->
-		<!-- 
-			{% for line in filecontent %}
-			<tr>
-				{% for i in line %}
-				<td>{{ i }}</td>
-				{% endfor %}
-			</tr>
-			{% endfor %} -->
-		</tbody>
-	</table>
-</content>
+	</aside>
+	<content class="col-9 mb-1">
+		<div class="row" id="map_container">
+			<div id="map"></div>
+			<!-- <div id="popover"></div> -->
+		</div>
+		<div class="row" id="qdata_request">
+			<form method="POST" id="qmapdivs">
+				{% csrf_token %}
+				<div id="chartq">
+					<label for="platformS">View Platform</label>
+					<div id="platformS">
+						<select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="platformSs">
+						</select>
+					</div>
+					<label for="sensorS">View Sensor</label>
+					<div id="sensorS">
+						<select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="sensorSs">
+						</select>
+					</div>
+					<label for="productS">View Product</label>
+					<div id="productS">
+						<select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="productSs">
+						</select>
+					</div>
+				</div>
+				<button id="pntplt" type="submit" class="btn btn-success mt-1">Chart Point</button>
+			</form>
+		</div>
+		<div class="row" id="chart">
+			
+		</div>
+	</content>
 </div>
 {% endblock %}
 
 {% block scripts %}
+	<script>const static_url = "{% static '' %}";</script>
 	<script type="text/javascript" href="{% static 'main/js/main.js' %}" ></script>
-  <script type="text/javascript" src="{% static 'query/js/query.js' %}"></script>
+  	<script type="text/javascript" src="{% static 'query/js/query.js' %}"></script>
 {% endblock %}
 
 {% block styles %}
