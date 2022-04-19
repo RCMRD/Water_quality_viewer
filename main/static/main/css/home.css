@@ -1,5 +1,5 @@
 #slider {
-	height: 400px;
+	height: 550px;
 	background-color: grey;
 	margin-top: 20px;
 }
@@ -15,6 +15,7 @@
 } 
 #posts, #articles {
 	margin-top: 20px;
+	height: 30%;
 }
 #posts {
 	margin-left: 55px;
@@ -31,4 +32,8 @@ small > p {
 	color:  blue;
 	text-decoration: underline;
 	font-style: italic;
+}
+#image_posts > img {
+	height: 100%;
+	width: 100%;
 }

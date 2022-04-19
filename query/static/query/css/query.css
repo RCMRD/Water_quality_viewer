@@ -1,11 +1,69 @@
-aside {
-	height:  500px;
+aside, content {
+	height: 700px;
 }
-
-form > .fw-bolder {
+#csvupload {
+	height: 20%;
+	margin-bottom: 2%;
+	display: inline-block;
+}
+#uploadform {
+	height: 60%;
+	display: inherit;
+}
+#csvupbtn {
 	height: 30%;
+	display: inherit;
+}
+aside > table {
+	height: 20%;
+	overflow: scroll;
+	margin-top: 5%;
+}
+#popdata {
+	height: 60%;
 }
 #chckpanel  {
-	height: 150px;
+	height: 30%;
 	overflow: scroll;
+}
+#qfile {
+	height: 10%;
+}
+#map_container {
+	height: 30%;
+	width: 100%;
+}
+#map {
+	height: 100%;
+	width: 100%;
+}
+#qdata_request {
+	height: 10%;
+	margin: auto;
+}
+#qmapdivs {
+	height: 100%;
+	width: 100%;
+}
+#chartq {
+	height: 40%;
+	width: 100%;
+	display: inline-block;
+}
+#chartq > div{
+	height: 100%;
+	width: 25%;
+	display: inline-block;
+}
+#pntplt {
+	height: 40%;
+	width: 100%;
+	margin-top: 2%;
+	display: inline-block;
+}
+#chart_container {
+	height: 35%;
+}
+#chart {
+	height: 60%;
 }

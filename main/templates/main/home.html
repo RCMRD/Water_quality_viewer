@@ -4,15 +4,19 @@
 <section id="slider" class="carousel slide" data-ride="carousel">
 	<ol class="carousel-indicators">
 		{% for slider in sliders %}
-		<li data-target="#slider" data-slide-to="{{ slider.title }}"></li>
+		<li data-target="#slider" data-slide-to="{{ slider.pk }}" {% if forloop.first %} class="active" {% endif %}></li>
 		{% endfor %}
 	</ol>
 	<div class="carousel-inner">
-		<div class="carousel-item">
-			{% for slider in sliders %}
-			<img class="d-block" src="{% static '' %}{{ slider.img.url }}" alt="{{ slider.title }}">
-			{% endfor %}
+		{% for slider in sliders %}
+		<div class="carousel-item {% if forloop.first %} active {% endif %}">
+			<img class="d-block w-100" src="{{ slider.img.url }}" alt="{{ slider.title }}">
+			<div class="carousel-caption d-none d-md-block">
+				<h5>{{ slider.title }}</h5>
+				<p>{{ slider.caption }}</p>
+			</div>
 		</div>
+		{% endfor %}
 	</div>
 	<a class="carousel-control-prev" href="#slider" role="button" data-slide="prev">
 		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -25,39 +29,44 @@
 </section>
 
 <div id="posts" class="row">
-<section id="blog_posts" class="col-5">
-	{% for blog in blogs %}
-	<div id="blog_area">
-		<div><h3>{{ blog.title }}</h3></div>
-		<div><small>{{ blog.abstract }}</small></div>
-		<div class="text"><p>{{ blog.text }}</p></div>
-		<small><p>Continue Reading >>>!</p></small>
-	</div>
-	{% endfor %}
-</section>
+	<section id="blog_posts" class="col-5">
+		<h2><strong>Read our Blogs</strong></h2>
+		{% for blog in blogs %}
+		<div id="blog_area" {% if forloop.first %} style="display: block;" {% else %} style="display: none;" {% endif %}>
+			<div><h3>{{ blog.title }}</h3></div>
+			<div><small>{{ blog.abstract }}</small></div>
+			<div class="text"><p>{{ blog.text }}</p></div>
+			<small><p>Continue Reading >>>!</p></small>
+		</div>
+		{% endfor %}
+	</section>
 
-<section id="image_posts" class="col-7">
-	{% for imagepost in imageposts %}
-	<div id="image_posts">
-		<div><h3>{{ imagepost.title }}</h3></div>
-		<img class="d-block" src="{% static '' %}{{ imagepost.img.url }}" alt="{{ imagepost.title }}">
-		<div><small> {{ imagepost.abstract }}</small></div>
-		<div class="text"><p>{{ imagepost.text }}</p></div>
-		<small><p>Continue Reading >>>!</p></small>
-	</div>
-	{% endfor %}
-</section>
+	<section id="image_posts" class="col-7">
+		<h2><strong>Read News Snippets</strong></h2>
+		{% for imagepost in imageposts %}
+		<div id="image_posts" {% if forloop.first %} style="display: block;" {% else %} style="display: none;" {% endif %}>
+			<div><h3>{{ imagepost.title }}</h3></div>
+			<img class="d-block" src={{ imagepost.img.url }} alt="{{ imagepost.title }}">
+			<div><small> {{ imagepost.abstract }}</small></div>
+			<div class="text"><p>{{ imagepost.text }}</p></div>
+			<small><p>Continue Reading >>>!</p></small>
+		</div>
+		{% endfor %}
+	</section>
 </div>
 
 <div id="articles" class="container">
-<section>
-	{% for article in articles %}
-	<h3>{{ article.title }}</h3>
-	<h5>{{ article.author }}</h5>
-	<small>{{ article.abstract }}</small>
-	<small><p>Continue Reading >>>!</p></small>
-	{% endfor %}
-</section>
+	<section>
+		<h2><strong>Article Reviews</strong></h2>
+		{% for article in articles %}
+		<div id="article" {% if forloop.first %} style="display: block;" {% else %} style="display: none;" {% endif %}>
+			<h3>{{ article.title }}</h3>
+			<h5>{{ article.author }}</h5>
+			<small>{{ article.abstract }}</small>
+			<small><p>Continue Reading >>>!</p></small>
+		</div>
+		{% endfor %}
+	</section>
 </div>
 
 {% endblock %}

@@ -11,6 +11,6 @@ select, input {
 button {
 	width: 100%;
 }
-#charts {
+#container {
 	height: 650px;
 }
