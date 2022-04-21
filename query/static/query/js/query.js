@@ -1,5 +1,5 @@
 const app_control = (function() {
-    var chcks, map, product,series,dateS, dateInt, products;
+    var chcks, map, product,series,dateS, dateInt, products, chart;
     var update_chcks, init_all, init_events, public_interface, add_table_column,
     read_csv_file, init_map, init_table_upload, create_chart, loadCsv,
     get_query_opts, qdata;
@@ -18,11 +18,6 @@ const app_control = (function() {
         positioning: 'bottom-center',
         stopEvent: false
     });
-
-    var products = ['chlorophyll', 'Trophic State'];
-    var pnt1series = [[12, 15,18],[30,41,45]];
-    var pnt2series = [[10, 11,19],[13,14,24]];
-    var pnt3series = [[24, 65,88],[31,41,45]];
 
     /*
     DEFINE THE FUNCTIONS
@@ -66,13 +61,6 @@ const app_control = (function() {
       return new ol.Map({
         controls: ol.control.defaults().extend(controls),
         interactions: ol.interaction.defaults(),
-        // .extend([
-        //     new ol.interaction.Select({
-        //         condition: function(evt) {
-        //             return evt.type == 'pointermove' || evt.type == 'singleclick';
-        //         },
-        //     })
-            // ]),
         layers: [raster],
         target: target,
         view: new ol.View({
@@ -180,32 +168,36 @@ const app_control = (function() {
     }
 
 
-    function create_chart(product,series){
+    function init_chart(){
         var options = {
         chart: {
             renderTo: 'chart',
-            type: 'line'
+            type: 'scatter'
         },    
         xAxis: {
             type: 'datetime'
         },    
         title: {
-            text: product
+            text: "Queried Point Time Series Chart"
         },    
-        yAxis: {
-            title: {
-                text: product
-            }
-        },
-        series: [{
-            name: product,
-            data: series,
-            // pointStart: Date.UTC(2010, 0, 0),
-            // pointInterval: 3600 * 1000 * dateInt 
-        }]
+        yAxis: [],
+        series: [],
+        lang : {
+            noData: "Data not Available for Display"
+        }
         };
 
-        var chart = new Highcharts.Chart(options);
+        chart = new Highcharts.Chart(options);
+    }
+
+    function create_chart(product, series) {
+        init_chart();
+        chart.addAxis({id:1}, false);
+        chart.addSeries({
+            yAxis: 1,
+            data: series,
+            label: product,
+        });
     }
 
     function removeA(arr) {
@@ -246,11 +238,12 @@ const app_control = (function() {
             });
             $('#qfile').on('click', function(e) {
                 e.preventDefault();
+                init_chart();
                 // Query CSV Data
                 products["filetitle"] = Object.values(csvtitle)[0];
-                // ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326')
                 queryData(products);
-            });
+                $('#downloadAll').show(); 
+            }); 
         });
     }
 
@@ -298,10 +291,33 @@ const app_control = (function() {
         });
         xhr.done(function (data){
             qdata = data['dataframe'];
+            $('#downloadAll').on('click', function(e){
+                e.preventDefault();
+                exportJSONToCSV(qdata);
+            });
            return qdata 
         });
     }
 
+    function exportJSONToCSV(objArray) {
+        var arr = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+        var str =
+          `${Object.keys(arr[0])
+            .map((value) => `"${value}"`)
+            .join(',')}` + '\r\n';
+        var csvContent = arr.reduce((st, next) => {
+          st +=
+            `${Object.values(next)
+              .map((value) => `"${value}"`)
+              .join(',')}` + '\r\n';
+          return st;
+        }, str);
+        var element = document.createElement('a');
+        element.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvContent);
+        element.target = '_blank';
+        element.download = 'export.csv';
+        element.click();
+      }
     /*
     Initialize Functions
     */
@@ -324,7 +340,6 @@ const app_control = (function() {
         chcks = $('#chckpanel').data('checks');
         init_all();
         map.addOverlay(popup);
-        // create_chart(products[0],pnt1series[0],'2010,01,01',24);
     });
     return public_interface;
 }());

@@ -1,36 +1,56 @@
+#mainarea {
+	height: 800px;
+	width: 95%;
+	margin: auto;
+
+}
 aside, content {
-	height: 700px;
+	height: 100%;
+}
+.btn {
+	width: 100%;
 }
 #csvupload {
-	height: 20%;
-	margin-bottom: 2%;
-	display: inline-block;
+	height: 24%;
+	width: 100%;
+}
+#csvupload > form {
+	width: 100%;
+	height: 100%;
+	padding: 0;
 }
 #uploadform {
-	height: 60%;
-	display: inherit;
+	height: 50%;
+	width: 100%;
+	display: inline-block;
+	margin-bottom: 1%;
 }
-#csvupbtn {
-	height: 30%;
-	display: inherit;
+#csvuploadbtn {
+	height: 20%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	display: block;
 }
-aside > table {
+#table {
 	height: 20%;
 	overflow: scroll;
-	margin-top: 5%;
 }
 #popdata {
-	height: 60%;
+	height: 30%;
+}
+#popdata > form {
+	height: 100%;
 }
 #chckpanel  {
-	height: 30%;
+	height: 70%;
 	overflow: scroll;
 }
-#qfile {
+#popdata > button {
 	height: 10%;
 }
 #map_container {
-	height: 30%;
+	height: 40%;
 	width: 100%;
 }
 #map {
@@ -41,29 +61,25 @@ aside > table {
 	height: 10%;
 	margin: auto;
 }
-#qmapdivs {
-	height: 100%;
-	width: 100%;
-}
 #chartq {
 	height: 40%;
-	width: 100%;
-	display: inline-block;
+}
+#chartq > label {
+	width: 10%;
 }
 #chartq > div{
-	height: 100%;
-	width: 25%;
+	height: 50%;
+	width: 22%;
 	display: inline-block;
+	margin-right: 1%;
 }
 #pntplt {
-	height: 40%;
-	width: 100%;
-	margin-top: 2%;
-	display: inline-block;
-}
-#chart_container {
-	height: 35%;
+	margin-top: 0.5%;
 }
 #chart {
-	height: 60%;
+	height: 40%;
+	margin-top: 1.5%;
+}
+#downloadAll {
+	display: none;
 }
