@@ -12,6 +12,15 @@
 .map:fullscreen {
 	height: 100%;
 }
+#loadergif {
+	display:none; 
+	position:absolute; 
+	top: calc(50vh - 70px); 
+	left: calc(50vw - 60px); 
+	padding:100px; 
+	background-color: white; 
+	border-radius: 15px; 
+}
 select {
 	width: 100%;
 }

@@ -6,7 +6,7 @@ const app_control = (function(){
 	var public_interface;
 
 	var draw, map, geometry, m_option1, m_option2, m_option3,
-	dataR, productQ;
+	dataR, productQ, chart;
 	var init_events, init_all, init_map, update_options;
 
 
@@ -120,6 +120,12 @@ const app_control = (function(){
 	}
 
 	init_events = function(){
+		// Initialize the Chart
+		$('#charttype').on('change', function(e) {
+			e.preventDefault();
+			const pType = this.value;
+			init_chart(pType);
+		});
 
 		// Add Interaction
 		$('#type').on('change', function(evt){
@@ -143,23 +149,30 @@ const app_control = (function(){
 			let qvalues = getQValues();
 			qvalues["coordinates"] = JSON.stringify(JSON.parse(geometry)["coordinates"]);
 			productQ = qvalues["product"]
-			getQData(qvalues);
-			// dataR = getQData(qvalues);
-			// console.log(dataR);
+			getQData(qvalues, "initx");
+		});
 
-			// Plot the Data
-			// const plotData = [];
-			// dataR.forEach((d)=> {
-			// 	const parray = [];
-			// 	parray.push(d[0]);
-			// 	if (d[1] === "None") {
-			// 		parray.push(null)
-			// 	} else {
-			// 		parray.push(d[1]);
-			// 	}
-			// 	plotData.push(parray)
-			// });
-			// create_chart(productQ, plotData);
+		$('#addSeries').on('click', function(e){
+			e.preventDefault();
+			let qvalues = getQValues();
+			qvalues["coordinates"] = JSON.stringify(JSON.parse(geometry)["coordinates"]);
+			productQ = qvalues["product"]
+			getQData(qvalues, "addx");
+		});
+
+		$('#addXSeries').on('click', function(e){
+			e.preventDefault();
+			let qvalues = getQValues();
+			qvalues["coordinates"] = JSON.stringify(JSON.parse(geometry)["coordinates"]);
+			productQ = qvalues["product"]
+			getQData(qvalues, "inity");
+		});
+
+		$('#resetChart').on('click', function(e){
+			e.preventDefault();
+			init_chart("scatter");
+			$('#seriesAdd').hide();
+			$('#loadchart').show();
 		});
 
 	}
@@ -172,6 +185,33 @@ const app_control = (function(){
 	/*
 		OPERATIONAL FUNCTIONS
 	*/
+	function init_chart(plottype){
+		var options = {
+		chart: {
+				renderTo: 'container',
+				type: plottype,
+		},    
+		xAxis: {
+				type: 'datetime'
+		},    
+		title: {
+				text: "Time Series View of WQ Products"
+		},    
+		yAxis: [],
+		series: [],
+		lang: {
+			noData: "No Data to Display",
+		},
+		exporting: {
+			csv: {
+				itemDelimeter: ','
+			}
+		}
+		};
+
+		chart = new Highcharts.Chart(options);
+	}
+
 	function iDraw(type) {
 		const drawObj = new ol.interaction.Draw({
 			source: source,
@@ -196,7 +236,7 @@ const app_control = (function(){
 		return geoJson;
 	}
 
-	function getQData(data) {
+	function getQData(data,add) {
 		let values = [];
 		var xhr = $.ajax({
 			type: 'POST',
@@ -222,7 +262,18 @@ const app_control = (function(){
 					}
 					plotData.push(parray)
 				});
-				create_chart(productQ, plotData);
+				const labelinfo = getLabel(productQ);
+				if (add === "initx") {
+					var counter = 0;
+					addSeries(plotData, labelinfo, 1, true, counter);
+					$('#loadchart').hide();
+					$('#seriesAdd').show();
+				} else if (add === "addx") {
+					addSeries(plotData, labelinfo, 1, false, counter+1)
+				}
+				else if (add === "inity"){
+					addSeries(plotData, labelinfo, 2, true, counter);
+				}
 			}
 		});
 		return values;
@@ -238,30 +289,57 @@ const app_control = (function(){
 		return products;
 	}
 
-	function create_chart(product,series){
-		var options = {
-		chart: {
-				renderTo: 'container',
-				type: 'line'
-		},    
-		xAxis: {
-				type: 'datetime'
-		},    
-		title: {
-				text: product
-		},    
-		yAxis: {
-				title: {
-						text: product
-				}
-		},
-		series: [{
-				name: product,
-				data: series,
-			}]
-		};
+	function getLabel(product) {
+		const label = {};
+		if (product === "chlor_a") {
+			label["text"] = "Chlorophyll A";
+			label["format"] = "mg/m3";
+		} else if ( product === 'SD' ){
+			label["text"] = "Secchi Depth";
+			label["format"] = "m";
+		} else if ( product === 'TSI' ){
+			label["text"] = "Trophic State Index";
+			label["format"] = "%";
+		} else if ( product === 'TSI_R' ){
+			label["text"] = "Trophic State Index Reclassified";
+			label["format"] = "%";
+		}
 
-		var chart = new Highcharts.Chart(options);
+		return label;
+	}
+
+	function downloadCsv(){
+		chart.downloadCsv();
+	}
+
+	function addSeries(data, labels, yaxisnum, bool, counter){
+		let seriesVals = {};
+		if (bool === true) {
+			if (yaxisnum === 2) {
+				chart.yAxis[0].options.opposite = true;
+			}
+			chart.addAxis({id: yaxisnum}, false)
+			chart.addSeries({
+				yAxis: yaxisnum,
+				data: data,
+				tooltip: {
+					valueSuffix: labels.format
+				}
+			});
+		} else {
+			chart.addSeries({
+				name: labels.text,
+				yAxis: yaxisnum,
+				data: data,
+				tooltip: {
+					valueSuffix: labels.format
+				}
+			});
+		}
+	}
+
+	function resetChart(){
+
 	}
 
 	/*

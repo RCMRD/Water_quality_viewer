@@ -2,15 +2,20 @@
 {% load static crispy_forms_tags %}
 
 {% block main %}
-<div class="row">
+<div id="mainarea" class="row">
 	<aside class="col-3">
-		<form method="POST" enctype="multipart/form-data" id="csvupload">
-			<div id="uploadform">
-				{% csrf_token %}
-				{{ csvform|crispy }}
-			</div>
-			<button id="csvupbtn" type="submit" class="btn btn-primary">Upload CSV</button>
-		</form>
+		<div class="row" id="csvupload">
+			<form method="POST" enctype="multipart/form-data">
+				<div id="uploadform">
+					{% csrf_token %}
+					{{ csvform|crispy }}
+				</div>
+				<div id="csvuploadbtn">
+					<button type="submit" class="btn btn-primary">Upload CSV</button>
+				</div>
+			</form>
+		</div>
+		<div class="row" id="table">
 			<table class="table">
 				<thead>
 					<th>FileName</th>
@@ -39,28 +44,29 @@
 					{% endfor %}
 				</tbody>
 			</table>
+		</div>
 		<p class="h3">Choose Variables to Query</p>
-		<form method="POST" id="popdata">
-			{% csrf_token %}
-			<div id="chckpanel" data-checks="{{ checks }}">
-			</div>
-			<label for="start_date" class="date mt-1 mb-1"><strong>Start Date: </strong></label>
-			<input id="start_date" type="date" class="form-control buttontheme" >
-			<label for="end_date" class="date mb-1 mt-1"><strong>End Date: </strong></label>
-			<input id="end_date" type="date" class="form-control buttontheme" >
-			<button id="qfile" type="submit" class="btn btn-success mt-1">Query Files</button>
-		</form>
-		
+		<div id="popdata" class="row">
+			<form method="POST">
+				{% csrf_token %}
+				<div id="chckpanel" data-checks="{{ checks }}">
+				</div>
+				<label for="start_date" class="date mt-1 mb-1"><strong>Start Date: </strong></label>
+				<input id="start_date" type="date" class="form-control buttontheme" >
+				<label for="end_date" class="date mb-1 mt-1"><strong>End Date: </strong></label>
+				<input id="end_date" type="date" class="form-control buttontheme" >
+				<button id="qfile" type="submit" class="btn btn-success mt-1">Query Database</button>
+			</form>
+		</div>
 	</aside>
 	<content class="col-9 mb-1">
 		<div class="row" id="map_container">
 			<div id="map"></div>
-			<!-- <div id="popover"></div> -->
 		</div>
 		<div class="row" id="qdata_request">
 			<form method="POST" id="qmapdivs">
 				{% csrf_token %}
-				<div id="chartq">
+				<div id="chartq" class="row">
 					<label for="platformS">View Platform</label>
 					<div id="platformS">
 						<select class="form-control mr-2 mb-2 mt-2 form-select form-select-sm mb-1" id="platformSs">
@@ -77,12 +83,14 @@
 						</select>
 					</div>
 				</div>
-				<button id="pntplt" type="submit" class="btn btn-success mt-1">Chart Point</button>
+				<div id="pntplt" class="row">
+					<button type="submit" class="btn btn-success mt-1">Chart Point</button>
+				</div>
 			</form>
 		</div>
 		<div class="row" id="chart">
-			
 		</div>
+		<button class="btn btn-success" id="downloadAll">Download Queried Data</button>
 	</content>
 </div>
 {% endblock %}

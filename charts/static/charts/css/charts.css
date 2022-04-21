@@ -14,3 +14,12 @@ button {
 #container {
 	height: 650px;
 }
+#seriesAdd {
+	display: none;
+	width: 100%;
+}
+#addSeries, #addXSeries, #resetChart {
+	display: inline-block;
+	width: 29%;
+	margin: auto;
+}

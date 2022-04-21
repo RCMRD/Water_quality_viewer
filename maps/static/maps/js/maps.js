@@ -217,7 +217,11 @@
       // interaction1 = $('#type').val();
       $('#loadmap').on('click', function(e){
            e.preventDefault(); 
+           console.log("hey");
+            // $('#loadergif').show();
            getWqImage(map);
+            // $('#loadergif').hide();
+
       });
       // interaction1.onchange = function(){
       //   map.removeInteraction(draw);
