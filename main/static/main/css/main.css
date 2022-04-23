@@ -16,3 +16,16 @@ footer {
 	margin-top: auto;
 	margin-bottom: 0;
 }
+h3 {
+	text-decoration: underline;
+	text-decoration-color: blue;
+	font-size: 20px;
+}
+footer > .btn {
+	width: 21%;
+	margin-left:  3%;
+}
+footer > .btn > a {
+	color: white;
+	text-decoration: none;
+}

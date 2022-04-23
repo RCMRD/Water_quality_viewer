@@ -39,7 +39,7 @@
 		<picture id="logo">
 			<img src="{% static 'main/images/water-logo.jpg' %}">
 		</picture>
-		<h1>In-land Water Resource Monitoring and Information Application</h1>
+		<h1>In-land Satellite-based Water-Quality Indicators Monitoring Tool <strong> (iSWIM)</strong></h1>
 		<nav class="nav nav-tabs justify-content-end">
 			<li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
 			<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" href="">Applications</a>
@@ -62,11 +62,11 @@
 	{% endblock %}
 	{% block footer %}
 	<footer>
-		<h3>Useful links</h3>
-		<li><a href="{% url 'contact' %}">Contact</a></li>
-		<li><a href="{% url 'maps' %}">Map Viewer</a></li>
-		<li><a href="{% url 'query' %}">Query a CsV File</a></li>
-		<li><a href="{% url 'charts' %}">Load Charts</a></li>
+		<h3><strong>Useful links</strong></h3>
+		<button class="btn btn-primary"><a href="{% url 'contact' %}">Contact</a></button>
+		<button class="btn btn-primary"><a href="{% url 'maps' %}">Map Viewer</a></button>
+		<button class="btn btn-primary"><a href="{% url 'query' %}">Query a CsV File</a></button>
+		<button class="btn btn-primary"><a href="{% url 'charts' %}">Load Charts</a></button>
 		<!-- <li><a href="">Log In</a></li> -->
 		<!-- <li><a href="">Register</a></li> -->
 		<!-- <li><a href="">E-learning Platform</a></li> -->

@@ -214,6 +214,7 @@ const app_control = (function() {
     function loadCsvToMap(){
         $('.fileget').on('click', function(e){
             e.preventDefault();
+            $('#loader').css("display", "inline-block");
             var csvtitle = $(this).data();
             var xhr = $.ajax({
                 type: "POST",
@@ -234,16 +235,21 @@ const app_control = (function() {
 
                     // Add source as layer in the map object
                     map.addLayer(sourceobject);
+                    $('#loader').css("display", "none");
+                } else if ("error" in data ) {
+                    $('#loader').css("display", "none");
+                    alert("Oops!! Try Again. Make sure your selections are valid")
                 }
             });
             $('#qfile').on('click', function(e) {
                 e.preventDefault();
+                $('#loader').css("display", "inline-block");
                 init_chart();
                 // Query CSV Data
                 products["filetitle"] = Object.values(csvtitle)[0];
                 queryData(products);
                 $('#downloadAll').show(); 
-            }); 
+            });
         });
     }
 
@@ -291,6 +297,7 @@ const app_control = (function() {
         });
         xhr.done(function (data){
             qdata = data['dataframe'];
+            $('#loader').css("display", "none");
             $('#downloadAll').on('click', function(e){
                 e.preventDefault();
                 exportJSONToCSV(qdata);
@@ -298,11 +305,33 @@ const app_control = (function() {
            return qdata 
         });
     }
+    String.prototype.padLeft = function (length, character) {
+        return new Array(length - this.length + 1).join(character || ' ') + this;
+    };
+    Date.prototype.toFormattedString = function () {
+        return [String(this.getMonth()+1).padLeft(2, '0'),
+        String(this.getDate()).padLeft(2, '0'),
+        String(this.getFullYear()).substr(2, 2)].join("/") //+ " " +
+        // [String(this.getHours()).padLeft(2, '0'),
+        // String(this.getMinutes()).padLeft(2, '0')].join(":");
+    };
 
     function exportJSONToCSV(objArray) {
-        var arr = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+        var origArr = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+        var arr = []
+        origArr.forEach((d) => {
+            const fixedArr = [];
+            const wd = new Date(d.time);
+            fixedArr.push(wd.toFormattedString());
+            fixedArr.push(d.value);
+            fixedArr.push(d.product);
+            fixedArr.push(d.sensor);
+            fixedArr.push(d.platform)
+            fixedArr.push(d.geom_id);
+            arr.push(fixedArr);
+        });
         var str =
-          `${Object.keys(arr[0])
+          `${Object.keys(origArr[0])
             .map((value) => `"${value}"`)
             .join(',')}` + '\r\n';
         var csvContent = arr.reduce((st, next) => {
