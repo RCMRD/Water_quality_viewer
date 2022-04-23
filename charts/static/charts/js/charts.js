@@ -146,6 +146,7 @@ const app_control = (function(){
 		// Ajax Call for the chart
 		$('#loadchart').on('click', function(e){
 			e.preventDefault();
+			$('#loader').css("display", "inline-block");
 			let qvalues = getQValues();
 			qvalues["coordinates"] = JSON.stringify(JSON.parse(geometry)["coordinates"]);
 			productQ = qvalues["product"]
@@ -154,6 +155,7 @@ const app_control = (function(){
 
 		$('#addSeries').on('click', function(e){
 			e.preventDefault();
+			$('#loader').css("display", "inline-block");
 			let qvalues = getQValues();
 			qvalues["coordinates"] = JSON.stringify(JSON.parse(geometry)["coordinates"]);
 			productQ = qvalues["product"]
@@ -162,6 +164,7 @@ const app_control = (function(){
 
 		$('#addXSeries').on('click', function(e){
 			e.preventDefault();
+			$('#loader').css("display", "inline-block");
 			let qvalues = getQValues();
 			qvalues["coordinates"] = JSON.stringify(JSON.parse(geometry)["coordinates"]);
 			productQ = qvalues["product"]
@@ -247,6 +250,7 @@ const app_control = (function(){
 		});
 		xhr.done(function(data){
 			if ('success' in data) {
+				$('#loader').css("display", "none");
 				console.log(data["success"]);
 				values = data["values"];
 
@@ -274,6 +278,10 @@ const app_control = (function(){
 				else if (add === "inity"){
 					addSeries(plotData, labelinfo, 2, true, counter);
 				}
+			} else if ("error" in data) {
+				$('#loader').css("display", "none");
+				alert("Oops!! Seems there was a problem loading your chart Recheck \
+					provided options and rechart");
 			}
 		});
 		return values;
