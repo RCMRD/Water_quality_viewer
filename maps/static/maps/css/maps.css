@@ -1,5 +1,5 @@
 #map {
-	height: 500px;
+	height: 100%;
 	width: 100%;
 }
 .map:-webkit-full-screen {
@@ -12,14 +12,8 @@
 .map:fullscreen {
 	height: 100%;
 }
-#loadergif {
-	display:none; 
-	position:absolute; 
-	top: calc(50vh - 70px); 
-	left: calc(50vw - 60px); 
-	padding:100px; 
-	background-color: white; 
-	border-radius: 15px; 
+section {
+	height: 600px;
 }
 select {
 	width: 100%;
@@ -30,14 +24,14 @@ label > .date {
 	font-size: 20px;
 }
 aside {
-	height: 500px;
+	height: 600px;
 	overflow: auto;
 }
 button {
 	width: 100%;
 }
 #screen4btns > button {
-	width: 48%;
+	width: 48.5%;
 	position: relative;
 }
 #maps2, #maps4 {
@@ -63,4 +57,5 @@ button {
 }
 #screen2btns, #screen4btns {
 	display: none;
+	width: 100%;
 }

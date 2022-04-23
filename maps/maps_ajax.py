@@ -24,5 +24,5 @@ def get_map(request):
 
 			print(return_obj)
 		except Exception as e:
-			return_obj["error"] = "Error Processing your request: "+ str(e)
+			return_obj["error"] = str(e)
 	return JsonResponse(return_obj)

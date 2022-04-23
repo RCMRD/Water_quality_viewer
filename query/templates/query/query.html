@@ -52,14 +52,20 @@
 				<div id="chckpanel" data-checks="{{ checks }}">
 				</div>
 				<label for="start_date" class="date mt-1 mb-1"><strong>Start Date: </strong></label>
-				<input id="start_date" type="date" class="form-control buttontheme" >
+				<input id="start_date" type="date" class="form-control buttontheme" required>
 				<label for="end_date" class="date mb-1 mt-1"><strong>End Date: </strong></label>
-				<input id="end_date" type="date" class="form-control buttontheme" >
+				<input id="end_date" type="date" class="form-control buttontheme" required>
 				<button id="qfile" type="submit" class="btn btn-success mt-1">Query Database</button>
 			</form>
 		</div>
 	</aside>
 	<content class="col-9 mb-1">
+		<div id="loader" style="display:none; position: absolute; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%); z-index: 88">
+	        <img id="loaderimage" src="{% static 'maps/imgs/loading.gif' %}" />
+	        <p style="text-align:center">
+	            Loading Data
+	        </p>
+    	</div>
 		<div class="row" id="map_container">
 			<div id="map"></div>
 		</div>

@@ -41,7 +41,8 @@
 				<label for="end_date" class="date mb-1 mt-1"><strong>End Date: </strong></label>
 				<input id="end_date" type="date" class="form-control buttontheme" >
 				</div>
-				<button id="loadmap" type="submit" class="btn btn-success mt-1">Load Map</button>
+				<button id="loadmap" type="submit" class="btn btn-success mt-1" data-toogle="tooltip"
+				data-placement="top" data-trigger="hover"  data-title="Select Data To View Before Loading Map">Load Map</button>
 			</div>
 	</form>
 	<label for="splitter" class="mb-1 mt-1"><strong>Split Canvas:</strong></label>
@@ -63,19 +64,21 @@
 </aside>
 
 <section class="col-9">
-<div id="loadergif">
-    <img id="loaderimage" src="{% static 'maps/imgs/loader.gif' %}" />
-    <p style="text-align:center">
-        Loading Data
-    </p>
-</div>
-	<div id="map" class="map"></div>
+	<div id="loader" style="display:none; position: absolute; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%); z-index: 88">
+        <img id="loaderimage" src="{% static 'maps/imgs/loading.gif' %}" />
+        <p style="text-align:center">
+            Loading Data
+        </p>
+    </div>
+	<div id="map" class="map">
+	</div>
 	<div id="maps2" class="split">
 		<div id="map21" class="maps2 left"></div>
 		<div id="map22" class="maps2 right"></div>
 	</div>
 	<div id="maps4" class="split">
-		<div id="map41" class="maps4 left mb-2"></div>
+		<div id="map41" class="maps4 left mb-2">
+		</div>
 		<div id="map42" class="maps4 right mb-2"></div>
 		<div id="map43" class="maps4 left"></div>
 		<div id="map44" class="maps4 right"></div>

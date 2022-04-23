@@ -88,6 +88,21 @@
     }
 
     init_events = function(){
+      // $(document).on({ 
+      //   ajaxStart: function(){ 
+      //     const $loadgif = this.getElementById('loadergif');
+      //     $loadgif.css("display", "inline-block"); 
+      //   },
+      //   ajaxStop: function(){ 
+      //     const $loadgif = this.getElementById('loadergif');
+      //     $loadgif.css("display", "none"); 
+      //   },
+      // });
+      // //   ajaxStart: function() { $(loadgif).css("display": "inline-block"); },
+      // //   ajaxStop: function() { $(loadgif).css("display": "none"); }
+      // // 
+      //
+      $('[data-toggle="tooltip"]').tooltip();
           load_map = function(data, layer, which) {
             which.getLayers().forEach(layer => {
               if (layer.get('name') != undefined & layer.get('name') === 'workinglayer') {
@@ -100,18 +115,24 @@
           };
 
           map_request = function(data_dict, layer, which){
-            $.ajax({
+            var xhr = $.ajax({
                 type: "POST",
                 url: "get_map/",
                 data: data_dict,
-                success: function(response){
-                console.log(response);
-                  load_map(response, layer, which);
-                },
-                error: function(error) {
-                  alert('Oops! There was an error of "'+error+'" while processing your request');
+                cache: data_dict
+              });
+            xhr.done(function(data) {
+                  if ("success" in data) {
+                        load_map(data, layer, which);
+                      $('#loader').css("display", "none");
+                  } else if ("error" in data){
+                    $('#loader').css("display", "none");
+                    alert('Oops! There was an error processing your request " \n \
+                      '+ data.error+'". \n \
+                      1. Re-check your selections \n \
+                      2. Make sure data is available');
                 }
-             });
+              });
             return;
           };
         }
@@ -217,11 +238,9 @@
       // interaction1 = $('#type').val();
       $('#loadmap').on('click', function(e){
            e.preventDefault(); 
+            $('#loader').css("display", "inline-block");
            console.log("hey");
-            // $('#loadergif').show();
            getWqImage(map);
-            // $('#loadergif').hide();
-
       });
       // interaction1.onchange = function(){
       //   map.removeInteraction(draw);
@@ -263,9 +282,11 @@
           $('#loadmap1').on('click', function(e){
            e.preventDefault(); 
            getWqImage(map1);
+            $('#loader').css("display", "inline-block");
           });
           $('#loadmap2').on('click', function(e){
-           e.preventDefault(); 
+           e.preventDefault();     
+            $('#loader').css("display", "inline-block");
            getWqImage(map2);
           });
         } else if (split == 4) {
@@ -329,19 +350,23 @@
           });
 
           $('#loadmap41').on('click', function(e){
-           e.preventDefault(); 
+           e.preventDefault();
+            $('#loader').css("display", "inline-block"); 
            getWqImage(map1);
           });
           $('#loadmap42').on('click', function(e){
            e.preventDefault(); 
+            $('#loader').css("display", "inline-block");
            getWqImage(map2);
           });
           $('#loadmap43').on('click', function(e){
            e.preventDefault(); 
+            $('#loader').css("display", "inline-block");
            getWqImage(map3);
           });
           $('#loadmap44').on('click', function(e){
            e.preventDefault(); 
+            $('#loader').css("display", "inline-block");
            getWqImage(map4);
           });
         } else {
