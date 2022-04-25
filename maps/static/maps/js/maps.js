@@ -154,7 +154,7 @@
       //   className: 'custom-mouse-position',
       //   target: document.getElementById('mouse-position'),
       // });
-      const scaleline = new ol.control.ScaleLine({units: 'us'});
+      const scaleline = new ol.control.ScaleLine({units: 'metric'});
       const fullscreen = new ol.control.FullScreen();
       let controls = [fullscreen, scaleline];
       return new ol.Map({

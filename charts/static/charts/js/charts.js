@@ -102,7 +102,7 @@ const app_control = (function(){
 		});
 
 		raster.set('name', 'baselayer');
-		const scaleline = new ol.control.ScaleLine({units: 'us'});
+		const scaleline = new ol.control.ScaleLine({units: 'metric'});
 		const fullscreen = new ol.control.FullScreen();
 
 		let controls = [fullscreen, scaleline];
