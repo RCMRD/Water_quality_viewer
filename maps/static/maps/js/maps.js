@@ -142,6 +142,7 @@
     */
     
     init_map = function(target){
+      updateLegend("","");
       let raster = new ol.layer.Tile({
         source: new ol.source.OSM()
       });
@@ -194,6 +195,7 @@
       workinglayer.set('name', 'workinglayer');
 
       m_option1 = $('#option1').val();
+      const m_option4 = $('#option4').val();
 
       if (m_option1 == 'lulc') {
         map_request({
@@ -228,6 +230,34 @@
       view.set(event.key, newValue);
     }
 
+    function updateLegend(product,mapN) {
+      if (product === 'lulc') {
+        console.log('plotting lulc');
+        document.getElementById('wq'+mapN).style.display = 'none';
+        document.getElementById('lulc'+mapN).src = static_url + 'maps/imgs/lulc_1.png';
+        document.getElementById('lulc'+mapN).style.display = 'inline-block';
+      } else if (product === 'chlor_a') {
+        console.log('plotting Chlor A');
+        document.getElementById('lulc'+mapN).style.display = 'none';
+        document.getElementById('wq'+mapN).src = static_url + 'maps/imgs/chlor_a_1.png';
+        document.getElementById('wq'+mapN).style.display = 'inline-block';
+      } else if (product === 'SD') {
+        console.log('plotting SD');
+        document.getElementById('lulc'+mapN).style.display = 'none';
+        document.getElementById('wq'+mapN).src = static_url + 'maps/imgs/sd_1.png';
+        document.getElementById('wq'+mapN).style.display = 'inline-block';
+      } else if (product === 'TSI' || product === 'TSI_R') {
+        console.log('plotting TSI');
+        document.getElementById('lulc'+mapN).style.display = 'none';
+        document.getElementById('wq'+mapN).src = static_url + 'maps/imgs/tsi_1.png';
+        document.getElementById('wq'+mapN).style.display = 'inline-block';
+      } else {
+        console.log('Resetting the plot');
+        $('.lulclegend').css("display", "none");
+        $('.wqlegend').css("display", "none");
+      }
+    }
+
     /*
     RUN THE FUNCTIONS
     */
@@ -237,29 +267,28 @@
       m_option3 = $('#option3').val();
       // interaction1 = $('#type').val();
       $('#loadmap').on('click', function(e){
-           e.preventDefault(); 
-            $('#loader').css("display", "inline-block");
-           console.log("hey");
+           e.preventDefault();
+           $('#loader').css("display", "inline-block");
+           m_option1 = $('#option1').val();
            getWqImage(map);
+           const m_option4 = $('#option4').val();
+           if (m_option1 === 'lulc') {
+            updateLegend(m_option1, "df");
+          } else {
+            updateLegend(m_option4, "df");
+          }
       });
-      // interaction1.onchange = function(){
-      //   map.removeInteraction(draw);
-      //   const typeval = $('#type').val();
-      //   addInteraction(typeval, map);
-      // };
       const splits = document.querySelector('.splits');
 
-      // $('#splitter').on('select', function(e){
         splits.addEventListener('change', function(e) {
         let split = $('#splitter').val();
         if (split == 2) {
-          document.getElementById("map").style.display = "none";
+          document.getElementById("mapdef").style.display = "none";
           document.getElementById("loadmap").style.display ="none";
           document.getElementById("maps4").style.display = "none";
           document.getElementById("screen4btns").style.display = "none";
           $(".ol-viewport").remove();
           document.getElementById("maps2").style.display = "inline-block";
-          // document.getElementById("map22").style.display = "inline-block";
           document.getElementById("screen2btns").style.display = "inline-block";
           let map1 = init_map("map21");
           let map2 = init_map("map22");
@@ -283,14 +312,30 @@
            e.preventDefault(); 
            getWqImage(map1);
             $('#loader').css("display", "inline-block");
+            m_option1 = $('#option1').val();
+            const m_option4 = $('#option4').val();
+            console.log(m_option4);
+            if (m_option1 === 'lulc') {
+              updateLegend(m_option1, "21");
+            } else if (m_option4 !== '...') {
+              console.log("plotting");
+              updateLegend(m_option4, "21");
+            }
           });
           $('#loadmap2').on('click', function(e){
            e.preventDefault();     
             $('#loader').css("display", "inline-block");
            getWqImage(map2);
+            m_option1 = $('#option1').val();
+            const m_option4 = $('#option4').val();
+            if (m_option1 === 'lulc') {
+              updateLegend(m_option1, "22");
+            } else {
+              updateLegend(m_option4, "22");
+            }
           });
         } else if (split == 4) {
-          document.getElementById("map").style.display = "none";
+          document.getElementById("mapdef").style.display = "none";
           document.getElementById("loadmap").style.display ="none";
           document.getElementById("screen2btns").style.display = "none";
           document.getElementById("maps2").style.display = "none";
@@ -353,21 +398,57 @@
            e.preventDefault();
             $('#loader').css("display", "inline-block"); 
            getWqImage(map1);
+           m_option1 = $('#option1').val();
+            const m_option4 = $('#option4').val();
+            console.log(m_option4);
+            if (m_option1 === 'lulc') {
+              updateLegend(m_option1, "41");
+            } else if (m_option4 !== '...') {
+              console.log("plotting");
+              updateLegend(m_option4, "41");
+            }
           });
           $('#loadmap42').on('click', function(e){
            e.preventDefault(); 
             $('#loader').css("display", "inline-block");
            getWqImage(map2);
+           m_option1 = $('#option1').val();
+            const m_option4 = $('#option4').val();
+            console.log(m_option4);
+            if (m_option1 === 'lulc') {
+              updateLegend(m_option1, "42");
+            } else if (m_option4 !== '...') {
+              console.log("plotting");
+              updateLegend(m_option4, "42");
+            }
           });
           $('#loadmap43').on('click', function(e){
            e.preventDefault(); 
             $('#loader').css("display", "inline-block");
            getWqImage(map3);
+           m_option1 = $('#option1').val();
+            const m_option4 = $('#option4').val();
+            console.log(m_option4);
+            if (m_option1 === 'lulc') {
+              updateLegend(m_option1, "43");
+            } else if (m_option4 !== '...') {
+              console.log("plotting");
+              updateLegend(m_option4, "43");
+            }
           });
           $('#loadmap44').on('click', function(e){
            e.preventDefault(); 
             $('#loader').css("display", "inline-block");
            getWqImage(map4);
+           m_option1 = $('#option1').val();
+            const m_option4 = $('#option4').val();
+            console.log(m_option4);
+            if (m_option1 === 'lulc') {
+              updateLegend(m_option1, "44");
+            } else if (m_option4 !== '...') {
+              console.log("plotting");
+              updateLegend(m_option4, "44");
+            }
           });
         } else {
           if (document.getElementById("maps2").style.display != "none") {
@@ -381,9 +462,11 @@
             document.getElementById("screen4btns").style.display = "none";
             $(".ol-viewport").remove();
           }
-          document.getElementById("map").style.display = "inline-block";
+          console.log("default map");
+          document.getElementById("mapdef").style.display = "inline-block";
           document.getElementById("loadmap").style.display ="inline-block";
           $(".ol-viewport").remove();
+          updateLegend("","");
           init_map("map");
         }
       });

@@ -122,6 +122,49 @@ const app_control = (function() {
         return products;
     }
 
+    // function update_control(which, val, value_type) {
+    //         const control = $('#' + which);
+    //         if (!control.val() || control.val() != chcks[val][value_type]) {
+    //             control.append($('<option>', {
+    //                 value: chcks[val][value_type],
+    //                 text: chcks[val][value_type]
+    //             }));
+    //         }
+    //     }
+
+    //     function update_options(control, val, value_type) {
+    //         const all_checked = $('input:checkbox:checked');
+    //         let cleared = false;
+    //         all_checked.each((i, element) => {
+    //             if (chcks[element.value]['platform'] === val) {
+    //                 if (!cleared) {
+    //                     $('#sensorSs').empty();
+    //                     $('#productSs').empty();
+    //                     cleared = true;
+    //                 }
+    //                 update_control('sensorSs', element.value, 'sensor');
+    //                 update_control('productSs', element.value, 'index');
+    //             }
+    //         });
+    //     }
+
+    //     function add_product(product_id) {
+    //         for (const key in chcks) {
+    //             if (key === product_id) {
+    //                 const platform_control = $('#platformSs');
+    //                 const need_update = $('#platformSs option').length === 0 || platform_control.val() === chcks[product_id]['platform'];
+    //                 if ($("#platformSs option:contains(" + chcks[product_id]['platform'] + ")").length === 0) {
+    //                     update_control('platformSs', product_id, 'platform');
+    //                 }
+
+    //                 if (need_update) {
+    //                     update_control('sensorSs', product_id, 'sensor');
+    //                     update_control('productSs', product_id, 'index');
+    //                 }
+    //             }
+    //         }
+    //     }
+
     init_events = function(){
         map.on('click', function(evt){
             const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
@@ -149,7 +192,8 @@ const app_control = (function() {
                             compiledData.push(darray);
                         }
                     });
-                    create_chart(product, compiledData);
+                    const labels = getLabels(product, sensor);
+                    create_chart(labels, compiledData);
 
                 });
 
@@ -175,7 +219,10 @@ const app_control = (function() {
             type: 'scatter'
         },    
         xAxis: {
-            type: 'datetime'
+            type: 'datetime',
+            tooltip: {
+                    xDateFormat: '%Y-%m-%d',
+                }
         },    
         title: {
             text: "Queried Point Time Series Chart"
@@ -189,14 +236,45 @@ const app_control = (function() {
 
         chart = new Highcharts.Chart(options);
     }
+    function getLabels(product,mission){
+        const label = {};
+        if (product === "chlor_a") {
+            label["ptext"] = "Chlorophyll A";
+            label["pformat"] = "mg/m3";
+        } else if ( product === 'SD' ){
+            label["ptext"] = "Secchi Depth";
+            label["pformat"] = "m";
+        } else if ( product === 'TSI' ){
+            label["ptext"] = "Trophic State Index";
+            label["pformat"] = "%";
+        } else if ( product === 'TSI_R' ){
+            label["ptext"] = "Trophic State Index Reclassified";
+            label["pformat"] = "%";
+        }
+        if (mission === "8") {
+            label["mtext"] = "Landsat 8";
+        } else if (mission === "2") {
+            label["mtext"] = "Sentinel 2";
+        } else if (mission === "aqua") {
+            label["mtext"] = "Modis Aqua";
+        } else if (mission === "terra") {
+            label["mtext"] = "Modis Terra";
+        }
+        return label;
+    }
 
-    function create_chart(product, series) {
+    function create_chart(labels, series) {
         init_chart();
         chart.addAxis({id:1}, false);
         chart.addSeries({
+            name: labels.mtext + ' ' + labels.ptext,
             yAxis: 1,
             data: series,
-            label: product,
+            tooltip: {
+                    valueDecimals: 2,
+                    valueSuffix: labels.pformat
+                },
+            label: labels.mtext,
         });
     }
 
@@ -230,6 +308,7 @@ const app_control = (function() {
                     for (let x=0; x < vals.length; x++) {
                         features.push(createPointFeature(vals[x]));
                     }
+                    console.log(features);
                     source.clear();
                     const sourceobject = createSourceForFeatures(features);
 
@@ -369,6 +448,28 @@ const app_control = (function() {
         chcks = $('#chckpanel').data('checks');
         init_all();
         map.addOverlay(popup);
+        // $("input[type='checkbox']").click(function (e) {
+        //         if ($(this).prop("checked")) {
+        //             add_product(e.target.id);
+        //         } else {
+        //             $('#platformSs').empty();
+        //             $('#sensorSs').empty();
+        //             $('#productSs').empty();
+        //             const all_checked = $('input:checkbox:checked');
+
+        //             all_checked.each((i, element) => {
+        //                 const needs_update = $('#platformSs option').length === 0 || $('#platformSs').val() === chcks[element.value]['platform'];
+        //                 if ($("#platformSs option:contains(" + chcks[element.value]['platform'] + ")").length === 0) {
+        //                     update_control('platformSs', element.value, 'platform');
+        //                 }
+        //                 if (needs_update) {
+        //                     update_control('sensorSs', element.value, 'sensor');
+        //                     update_control('productSs', element.value, 'index');
+        //                 }
+
+        //             });
+        //         }
+        //     });
     });
     return public_interface;
 }());

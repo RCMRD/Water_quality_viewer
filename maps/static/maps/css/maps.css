@@ -1,4 +1,8 @@
-#map {
+#mapdef, #map {
+	height: 100%;
+	width: 100%;
+}
+.map {
 	height: 100%;
 	width: 100%;
 }
@@ -11,6 +15,21 @@
  }
 .map:fullscreen {
 	height: 100%;
+}
+.lulclegend {
+	position: absolute;
+	z-index: 10;
+	top: 1%;
+	bottom: 30%;
+	height: 40%;
+	width: 30%;
+}
+.wqlegend {
+	position: absolute;
+	z-index: 10;
+	bottom: 1%;
+	height: 12%;
+	width: 40%;
 }
 section {
 	height: 600px;
@@ -38,22 +57,37 @@ button {
 	height: 100%;
 	width: 100%;
 	display: none;
+	position: relative;
 }
-.maps2 {
+#map21def > #legend, #map22def > #legend {
+	position: absolute;
+}
+#map21def, #map22def {
+	position: relative;
 	height: 100%;
 	width: 49%;
 	margin: 5pxs;
+	display: inline-block;
+}
+.maps2, #maps4 {
+	height: 100%;
+	width: 100%;
 }
 .maps4 {
 	height: 48%;
 	width: 49%;
 	margin: 5pxs;
+	position: relative;
 }
 .left {
 	float: left;
 }
 .right {
 	float: right;
+}
+#map41, #map42, #map43, #map44 {
+	height: 100%;
+	width: 100%;
 }
 #screen2btns, #screen4btns {
 	display: none;

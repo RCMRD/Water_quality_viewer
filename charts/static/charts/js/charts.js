@@ -14,7 +14,26 @@ const app_control = (function(){
 		INITIALIZE VARIABLES
 	*/
 	const source = new ol.source.Vector({wrapX: false});
-	const vector = new ol.layer.Vector({source: source,});
+	const vector = new ol.layer.Vector({
+	  source: source,
+	  style: new ol.style.Style({
+	    fill: new ol.style.Fill({
+	      color: 'rgba(255, 255, 255, 0.2)',
+	    }),
+	    stroke: new ol.style.Stroke({
+	      color: '#ffcc33',
+	      width: 2,
+	    }),
+	    image: new ol.style.Circle({
+	      radius: 7,
+	      fill: new ol.style.Fill({
+	        color: '#ffcc33',
+	      }),
+	    }),
+	  }),
+	});
+
+	// const vector = new ol.layer.Vector({source: source,});
 
 	/*
 		INITIALIZE FUNCTIONS
@@ -104,7 +123,6 @@ const app_control = (function(){
 		raster.set('name', 'baselayer');
 		const scaleline = new ol.control.ScaleLine({units: 'metric'});
 		const fullscreen = new ol.control.FullScreen();
-
 		let controls = [fullscreen, scaleline];
 		return new ol.Map({
 			controls: ol.control.defaults().extend(controls),
@@ -123,6 +141,7 @@ const app_control = (function(){
 		// Initialize the Chart
 		$('#charttype').on('change', function(e) {
 			e.preventDefault();
+			$('#loadchart').show();
 			const pType = this.value;
 			init_chart(pType);
 		});
@@ -136,12 +155,22 @@ const app_control = (function(){
 				draw = iDraw(typeVal);
 				map.addInteraction(draw);
 			}
+			// Handle Added Features
+			source.on('addfeature', function(evt){
+				const num = source.getFeatures();
+				if (num.length > 1) {
+					source.removeFeature(num[0]);
+				}
+				const feature = evt.feature;
+				geometry = getAddFeature(evt);
+				console.log(geometry);
+			});
 		});
 
-		// Handle Added Features
-		source.on('addfeature', function(evt){
-			geometry = getAddFeature(evt);
-		});
+		
+		// source.on('addfeature', function(evt){
+		// 	geometry = getAddFeature(evt);
+		// });
 
 		// Ajax Call for the chart
 		$('#loadchart').on('click', function(e){
@@ -149,7 +178,8 @@ const app_control = (function(){
 			$('#loader').css("display", "inline-block");
 			let qvalues = getQValues();
 			qvalues["coordinates"] = JSON.stringify(JSON.parse(geometry)["coordinates"]);
-			productQ = qvalues["product"]
+			// qvalues["coordinates"] = JSON.parse(geometry);
+			productQ = [qvalues["sensor"],qvalues["product"]];
 			getQData(qvalues, "initx");
 		});
 
@@ -158,7 +188,7 @@ const app_control = (function(){
 			$('#loader').css("display", "inline-block");
 			let qvalues = getQValues();
 			qvalues["coordinates"] = JSON.stringify(JSON.parse(geometry)["coordinates"]);
-			productQ = qvalues["product"]
+			productQ = [qvalues["sensor"],qvalues["product"]];
 			getQData(qvalues, "addx");
 		});
 
@@ -167,7 +197,7 @@ const app_control = (function(){
 			$('#loader').css("display", "inline-block");
 			let qvalues = getQValues();
 			qvalues["coordinates"] = JSON.stringify(JSON.parse(geometry)["coordinates"]);
-			productQ = qvalues["product"]
+			productQ = [qvalues["sensor"],qvalues["product"]];
 			getQData(qvalues, "inity");
 		});
 
@@ -188,6 +218,10 @@ const app_control = (function(){
 	/*
 		OPERATIONAL FUNCTIONS
 	*/
+	function clearSource(){
+		map.removeInteraction(draw);
+		vector.getSource().clear();
+	}
 	function init_chart(plottype){
 		var options = {
 		chart: {
@@ -195,7 +229,11 @@ const app_control = (function(){
 				type: plottype,
 		},    
 		xAxis: {
-				type: 'datetime'
+				type: 'datetime',
+				crosshair: true,
+				tooltip: {
+					xDateFormat: '%Y-%m-%d',
+				}
 		},    
 		title: {
 				text: "Time Series View of WQ Products"
@@ -228,14 +266,11 @@ const app_control = (function(){
 	}
 
 	function getAddFeature(evt){
-		const feature = evt.feature;
+		const feature = evt.feature.clone();
 		const featType = feature.getGeometry().getType();
 		let geoJson = new ol.format.GeoJSON();
-
-		if (featType === 'Point' || featType === 'Polygon') {
-			const featTransformed = feature.getGeometry().transform('EPSG:3857', 'EPSG:4326');
-			geoJson = geoJson.writeGeometry(featTransformed);
-		}
+		const featTransformed = feature.getGeometry().transform('EPSG:3857', 'EPSG:4326');
+		geoJson = geoJson.writeGeometry(featTransformed);
 		return geoJson;
 	}
 
@@ -266,7 +301,7 @@ const app_control = (function(){
 					}
 					plotData.push(parray)
 				});
-				const labelinfo = getLabel(productQ);
+				const labelinfo = getLabel(productQ[0],productQ[1]);
 				if (add === "initx") {
 					var counter = 0;
 					addSeries(plotData, labelinfo, 1, true, counter);
@@ -280,8 +315,8 @@ const app_control = (function(){
 				}
 			} else if ("error" in data) {
 				$('#loader').css("display", "none");
-				alert("Oops!! Seems there was a problem loading your chart Recheck \
-					provided options and rechart");
+				alert("Oops!! Seems there was a problem loading your chart \n \
+					Recheck the provided options and rechart" + data.error);
 			}
 		});
 		return values;
@@ -297,20 +332,29 @@ const app_control = (function(){
 		return products;
 	}
 
-	function getLabel(product) {
+	function getLabel(mission, product) {
 		const label = {};
 		if (product === "chlor_a") {
-			label["text"] = "Chlorophyll A";
-			label["format"] = "mg/m3";
+			label["ptext"] = "Chlorophyll A";
+			label["pformat"] = "mg/m3";
 		} else if ( product === 'SD' ){
-			label["text"] = "Secchi Depth";
-			label["format"] = "m";
+			label["ptext"] = "Secchi Depth";
+			label["pformat"] = "m";
 		} else if ( product === 'TSI' ){
-			label["text"] = "Trophic State Index";
-			label["format"] = "%";
+			label["ptext"] = "Trophic State Index";
+			label["pformat"] = "%";
 		} else if ( product === 'TSI_R' ){
-			label["text"] = "Trophic State Index Reclassified";
-			label["format"] = "%";
+			label["ptext"] = "Trophic State Index Reclassified";
+			label["pformat"] = "%";
+		}
+		if (mission === "8") {
+			label["mtext"] = "Landsat 8";
+		} else if (mission === "2") {
+			label["mtext"] = "Sentinel 2";
+		} else if (mission === "aqua") {
+			label["mtext"] = "Modis Aqua";
+		} else if (mission === "terra") {
+			label["mtext"] = "Modis Terra";
 		}
 
 		return label;
@@ -321,26 +365,29 @@ const app_control = (function(){
 	}
 
 	function addSeries(data, labels, yaxisnum, bool, counter){
-		let seriesVals = {};
+		// let seriesVals = {};
 		if (bool === true) {
 			if (yaxisnum === 2) {
 				chart.yAxis[0].options.opposite = true;
 			}
 			chart.addAxis({id: yaxisnum}, false)
 			chart.addSeries({
+				name: labels.mtext + ' ' + labels.ptext,
 				yAxis: yaxisnum,
 				data: data,
 				tooltip: {
-					valueSuffix: labels.format
+					valueDecimals: 2,
+					valueSuffix: labels.pformat
 				}
 			});
 		} else {
 			chart.addSeries({
-				name: labels.text,
+				name: labels.mtext + ' ' + labels.ptext,
 				yAxis: yaxisnum,
 				data: data,
 				tooltip: {
-					valueSuffix: labels.format
+					valueDecimals: 2,
+					valueSuffix: labels.pformat
 				}
 			});
 		}

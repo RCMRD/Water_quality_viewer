@@ -1,0 +1,264 @@
+{% extends 'main/base1.html' %}
+{% load static %}
+{% block main %}
+<div id="sidebar" class="col-3 resize" aria-label="close">
+	<form method="POST" id="lake_form" class="">
+		{% csrf_token %}
+		<label for="lake_select"><strong>Select a Lake</strong></label>
+		<select id="lake_select" class="form-select form-select-sm mb-1">
+			<option selected>Select a Lake</option>
+			<option value="victoria">Lake Victoria</option>
+			<option value="malawi">Lake Malawi</option>
+			<option value="tanganyika">Lake Tanganyika</option>
+		</select>
+	</form>
+	<form method="POST" id="func_form" class="">
+		{% csrf_token %}
+		<label for="func_select"><strong>Select a Function to Use</strong></label>
+		<select id="func_select" class="form-select form-select-sm mb-1">
+			<option selected>Select a Function</option>
+			<option value="map">View Map</option>
+			<option value="chart">Chart Variables</option>
+			<option value="query">Query the Database</option>
+		</select>
+	</form>
+	<div id="landcoverlegend" class="hidden">
+		<img src="{% static 'maps/imgs/lulc_1.png' %}">
+	</div>
+</div>
+<div id="main_section" class="col-9">
+	<div id="userInfo" class="row w-100">
+		<div class="col-2">
+			<nav class="navbar navbar-light col-1">
+				<button type="button" class="navbar-toggler sticky-top" data-bs-toggle="collapse" data-bs-target="#layerContent" aria-controls="layerContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			</nav>
+		</div>
+		<div id="layerContent" class="collapse col-9 height100">
+			<div>
+				<p><strong>Buttons</strong></p>
+				<button type="button" id="addCanvas" data-bs-toggle="modal" data-bs-target="#addMapCanvasModal" class="btn btn-primary">Add Map Canvas</button>
+				<button type="button" id="getMap" data-bs-toggle="modal" data-bs-target="#getMapModal" class="btn btn-primary">Get Map</button>
+				<button type="button" id="addLatLon" data-bs-toggle="modal" data-bs-target="#addLatLonModal" class="btn btn-primary hidden">Add Geometry</button>
+				<button type="button" id="uploadCSV" data-bs-toggle="modal" data-bs-target="#uploadCsvModal" class="btn btn-primary hidden">Upload CSV</button>
+				<button type="button" id="queryPnt" data-bs-toggle="modal" data-bs-target="#queryPntModal" class="btn btn-primary hidden">Query Point</button>
+			</div>
+			<div>
+				<p><small><strong>Layers</strong></small></p>
+				<p><small>CSV Uploads</small></p>
+				<div class="row">
+					<table id="csvlayers" class="table hidden">
+						<thead>
+							<th>FileName</th>
+							<th>View File Meta</th>
+							<th>Map</th>
+							<th>Delete</th>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="plotArea" class="row">
+		<div id="mapContainer" class="height100 w-100 row">
+		</div>
+		<div id="chartContainer" class="row"></div>
+	</div>
+	<div id="addMapCanvasModal" class="modal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Add a Map Canvas</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="input-group mb-3">
+						<form class="form" id="canvasform" name="addcanvas" method="post" required>
+							{% csrf_token %}
+							Canvas Name: <input type="text" name="mcname">
+							<input id="mc_name" data-bs-dismiss="modal" type="submit" value="Create Map Canvas">
+						</form> 
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<!-- <button type="submit" class="btn btn-primary">Create Canvas</button> -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="getMapModal" class="modal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Get a Water Quality Map</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<!-- <form class="form" id="querypntform" name="querypnt" method="post" required> -->
+						<!-- {% csrf_token %} -->
+						<p>Filter Collection</p>
+						<div id="navpanel" data-datasets="{{ datasets }}">
+							<select id="option1" class="form-select form-select-sm mb-1">
+								<option value="...">Select Map Type</option>
+							</select>
+							<select id="option2"  class="form-select form-select-sm mb-1">
+								<option value="...">Select a Dataset</option>
+							</select>
+							<select id="option3"  class="form-select form-select-sm mb-1">
+								<option value="...">Select a Sensor</option>
+							</select>
+							<select id="option4"  class="form-select form-select-sm mb-1">
+								<option value="...">Select a Product</option>
+							</select>
+							<div class="date">
+								<label for="start_date" class="date mt-1 mb-1"><strong>Start Date: </strong></label>
+								<input id="start_date" type="date" class="form-control buttontheme" >
+								<label for="end_date" class="date mb-1 mt-1"><strong>End Date: </strong></label>
+								<input id="end_date" type="date" class="form-control buttontheme" >
+							</div>
+							<select id="mapcanvas" class="form-select form-select-sm mt-2 mb-1">
+								<option selected>Select Map Canvas To Overlay</option>
+								<option value="one">One</option>
+							</select>
+							<button id="loadmap" type="submit" class="btn btn-success mt-1" data-toogle="tooltip" data-placement="top" data-trigger="hover" data-bs-dismiss="modal"  data-title="Select Data To View Before Loading Map">Load Map</button>
+						</div>
+					<!-- </form>  -->
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="addLatLonModal" class="modal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Choose Geometry</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="input-group mb-3">
+						<button type="button" class="btn btn-secondary" id="addPoint" data-bs-toggle="modal" data-bs-target="#addPointModal">Add Point</button>
+						<button type="button" class="btn btn-secondary" id="drawPolygon" data-bs-dismiss="modal">Draw Polygon</button>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="addPointModal" class="modal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Add a Point</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="input-group mb-3">
+						<form class="form" id="addpoint" name="addlatlon" method="post" required>
+							{% csrf_token %}
+							Latitude: <input type="number" id="latvalue" required min="-90" max="90" value="0" step=".01" name="latname">
+							Longitude: <input type="number" id="lonvalue" required min="-180" max="180" value="0" step=".01" name="lonname">
+							<small><a href="#" id="addpnttomap" data-bs-dismiss="modal">Click Map</a></small>
+
+						<button type="submit" id="addpntbtn" class="btn btn-primary" data-bs-dismiss="modal">Add Point</button>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" id="drawPolygon" data-bs-toggle="modal" data-bs-target="#addLatLonModal">Back</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="addPolyModal" class="modal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Add a Point</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="input-group mb-3">
+						<form class="form" id="addpolygon" name="add_polygon" method="post" required>
+							{% csrf_token %}
+							Name of Polygon: <input type="text" id="latvalue" required value="Polygon Name" name="polyname">
+							<small><a href="#" id="addpoltomap" data-bs-dismiss="modal">Click Map</a></small>
+
+						<button type="submit" id="addpolbtn" class="btn btn-primary">Add Polygon</button>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" id="drawPolygon" data-bs-toggle="modal" data-bs-target="#addLatLonModal">Back</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="uploadCsvModal" class="modal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Upload CSV</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form class="form" name="uploadcsv" method="post" role="form" required>
+						{% csrf_token %}
+						<div class="input-group mb-3">
+								Select File(s): <input type="file" id="select_csv" multiple accept=".csv, .CSV">
+						</div>
+						<button type="submit" class="btn btn-primary" id="uploadcsvform" data-bs-dismiss="modal">Upload</button>
+					</form> 
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="queryPntModal" class="modal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Query Database</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="input-group mb-3">
+						<form class="form" id="querypntform" name="querypnt" method="post" required>
+							{% csrf_token %}
+							Select Variables
+							<div id="chckpanel" data-checks="{{ checks }}">
+							</div>
+						</form> 
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Query Database</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+{% endblock %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'maps/css/maps1.css'%}">
+{% endblock %}
+
+{% block scripts %}
+	<script>const static_url = "{% static '' %}";</script>
+	<script type="text/javascript" src="{% static 'maps/js/ajax.js' %}"></script>
+	<script type="text/javascript" src="{% static 'maps/js/maps1.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,70 @@
+.hidden {
+	display: none;
+}
+.resize {
+	resize: both;
+	overflow: auto;
+}
+.height100 {
+	height: 100%;
+}
+.width100 {
+	width: 100%;
+}
+#main_section {
+	height: 1000px;
+}
+#sidebar {
+	max-width: 25%;
+	min-width: 15%;
+	padding: 1%;
+}
+#userInfo {
+	height: 30%;
+	display: inline-flex;
+}
+#plotArea {
+	height: 70%;
+}
+#mapContainer {
+	height: 70%;
+	display: inline-flex;
+}
+#chartContainer {
+	height: 30%;
+}
+.defaultMap {
+	height: 80%;
+}
+.mapcanvas {
+	height: 95%;
+}
+.mapTitle {
+	height: 10%;
+}
+.mapdiv {
+	height: 70%;
+}
+.legend {
+	height: 15%;
+}
+.close {
+  cursor: pointer;
+  position: absolute;
+  top: 3%;
+  right: 0%;
+  padding: 5px 5px;
+  transform: translate(0%, -50%);
+}
+.close:hover {background: #bbb;}
+span {
+	color: black;
+}
+.loader {
+	display: none; 
+	position: absolute; 
+	top: 50%; 
+	left: 50%; 
+	transform: translateX(-50%) translateY(-50%); 
+	z-index: 88;
+}

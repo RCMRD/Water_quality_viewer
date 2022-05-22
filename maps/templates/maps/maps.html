@@ -70,18 +70,51 @@
             Loading Data
         </p>
     </div>
-	<div id="map" class="map">
+	<div id="mapdef">
+		<div id="map" class="map">
+		</div>
+		<div id="legenddf" class="legend">
+			<img src="" id="lulcdf" class="lulclegend">
+			<img src="" id="wqdf" class="wqlegend">
+		</div>
 	</div>
 	<div id="maps2" class="split">
-		<div id="map21" class="maps2 left"></div>
-		<div id="map22" class="maps2 right"></div>
+		<div id="map21def" class="maps2 left">
+			<div id="map21" class="map"></div>
+			<img src="" id="lulc21" class="lulclegend">
+			<img src="" id="wq21" class="wqlegend">
+		</div>
+		<div id="map22def" class="maps2 right">
+			<div id="map22" class="map"></div>
+			<img src="" id="lulc22" class="lulclegend">
+			<img src="" id="wq22" class="wqlegend">
+		</div>
 	</div>
 	<div id="maps4" class="split">
-		<div id="map41" class="maps4 left mb-2">
+		<div id="maps41def" class="maps4 left mb-2">
+			<div id="map41" class="map">
+			</div>
+			<img src="" id="lulc41" class="lulclegend">
+			<img src="" id="wq41" class="wqlegend">
 		</div>
-		<div id="map42" class="maps4 right mb-2"></div>
-		<div id="map43" class="maps4 left"></div>
-		<div id="map44" class="maps4 right"></div>
+		<div id="maps42def" class="maps4 right mb-2">
+			<div id="map42" class="map">
+			</div>
+			<img src="" id="lulc42" class="lulclegend">
+			<img src="" id="wq42" class="wqlegend">
+		</div>
+		<div id="maps43def" class="maps4 left mb-2">
+			<div id="map43" class="map">
+			</div>
+			<img src="" id="lulc43" class="lulclegend">
+			<img src="" id="wq43" class="wqlegend">
+		</div>
+		<div id="maps44def" class="maps4 right mb-2">
+			<div id="map44" class="map">
+			</div>
+			<img src="" id="lulc44" class="lulclegend">
+			<img src="" id="wq44" class="wqlegend">
+		</div>
 	</div>
 </section>
 </div>
@@ -93,6 +126,7 @@
 {% endblock %}
 
 {% block scripts %}
+	<script>const static_url = "{% static '' %}";</script>
 	<script type="text/javascript" src="{% static 'maps/js/ajax.js' %}"></script>
   <script type="text/javascript" src="{% static 'maps/js/maps.js' %}"></script>
 {% endblock %}
