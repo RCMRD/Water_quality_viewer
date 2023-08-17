@@ -1,0 +1,25 @@
+#map {
+	height: 300px;
+}
+aside {
+	overflow: auto;
+	height: 650px;
+}
+select, input {
+	width: 100%;
+}
+button {
+	width: 100%;
+}
+#container {
+	height: 650px;
+}
+#seriesAdd {
+	display: none;
+	width: 100%;
+}
+#addSeries, #addXSeries, #resetChart {
+	display: inline-block;
+	width: 29%;
+	margin: auto;
+}

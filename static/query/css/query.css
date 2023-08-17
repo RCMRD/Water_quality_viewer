@@ -1,0 +1,85 @@
+#mainarea {
+	height: 800px;
+	width: 95%;
+	margin: auto;
+
+}
+aside, content {
+	height: 100%;
+}
+.btn {
+	width: 100%;
+}
+#csvupload {
+	height: 24%;
+	width: 100%;
+}
+#csvupload > form {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+}
+#uploadform {
+	height: 50%;
+	width: 100%;
+	display: inline-block;
+	margin-bottom: 1%;
+}
+#csvuploadbtn {
+	height: 20%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	display: block;
+}
+#table {
+	height: 20%;
+	overflow: scroll;
+}
+#popdata {
+	height: 30%;
+}
+#popdata > form {
+	height: 100%;
+}
+#chckpanel  {
+	height: 70%;
+	overflow: scroll;
+}
+#popdata > button {
+	height: 10%;
+}
+#map_container {
+	height: 40%;
+	width: 100%;
+}
+#map {
+	height: 100%;
+	width: 100%;
+}
+#qdata_request {
+	height: 10%;
+	margin: auto;
+}
+#chartq {
+	height: 40%;
+}
+#chartq > label {
+	width: 10%;
+}
+#chartq > div{
+	height: 50%;
+	width: 22%;
+	display: inline-block;
+	margin-right: 1%;
+}
+#pntplt {
+	margin-top: 0.5%;
+}
+#chart {
+	height: 40%;
+	margin-top: 1.5%;
+}
+#downloadAll {
+	display: none;
+}

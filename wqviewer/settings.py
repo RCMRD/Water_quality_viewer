@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-vmi2(f=mzqk9pk)%89a-k30+1-x_3j+hh3n#&6a8)u8nt0dldm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['52.55.100.18','waterqualitymonitor.rcmrd.org']
 
 
 # Application definition
@@ -131,6 +131,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
